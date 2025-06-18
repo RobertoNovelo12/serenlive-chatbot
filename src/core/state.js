@@ -39,7 +39,7 @@ export function updateState(newState) {
 // Función para cargar preguntas desde JSON
 export async function loadQuestions() {
   try {
-    const res = await fetch("/chatbot/src/core/questions.json");
+    const res = await fetch("questions.json");
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
 
