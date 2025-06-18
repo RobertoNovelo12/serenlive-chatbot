@@ -25,7 +25,7 @@ export function handleInitialOptionClick(optionId) {
       showRemainingOptions();
     });
   } else if (optionId === 'ingredientes') {
-    renderBotMessage("Serenlive es un suplemento alimenticio de origen natural, formulado con extractos estandarizados de plantas adaptógenas como la ashwagandha, pasiflora y valeriana, junto con vitaminas del complejo B que ayudan al sistema nervioso. Todos los ingredientes son de grado farmacéutico y cumplen con los más altos estándares de calidad.", () => {
+    renderBotMessage("Serenlive es un suplemento alimenticio de origen natural, formulado con extractos estandarizados de Valeriana officinalis, Passiflora incarnata, Melissa officinalis y Hoja de naranja (Citrus × aurantium). Ofreciendo una solución segura y de acción inmediata ante situaciones de estrés o tensión.", () => {
       showRemainingOptions();
     });
   } else if (optionId === 'iniciar_test') {
