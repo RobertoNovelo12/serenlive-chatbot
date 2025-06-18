@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serenlive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="chat-demo">
+            <div class="chat-header">
+                <div class="bot-avatar">🤖</div>
+                <div>
+                    <div class="chat-title">Serenlive</div>
+                    <div class="chat-subtitle">En línea • Siempre disponible</div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot" style="animation-delay: 0.5s;">
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" class="input-field" placeholder="Escribe tu nombre..." id="nameInput">
+                <button class="send-button" onclick="sendName()">→</button>
+            </div>
+        </div>
+    </div>
+    <script src="src/main.js" type="module"></script>
+</body>
+</html>
