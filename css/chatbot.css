@@ -461,7 +461,7 @@
     top: 0;
     width: 100% !important;
     max-width: 100% !important;
-    height: 100vh;
+    height: 95dvh;
     z-index: 9999 !important;
     display: flex !important;
     align-items: center;
