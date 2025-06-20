@@ -468,8 +468,8 @@
     justify-content: center;
   }
   .chat-demo {
-    height: 90vh;
-    max-height: 90vh;
+    height: 85dvh;
+    max-height: 85dvh;
     width: 95%;
     max-width: 95%;
     margin: 0;
