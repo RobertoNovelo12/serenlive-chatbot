@@ -151,6 +151,18 @@ function maximizeChat() {
   }, 200);
 }
 
+function setVH() {
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Ejecutar al cargar
+setVH();
+
+// Ejecutar cuando cambie el tamaño (cuando se oculte/muestre la barra de URL)
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
 // Hacer las funciones accesibles globalmente
 window.minimizeChat = minimizeChat;
 window.maximizeChat = maximizeChat;

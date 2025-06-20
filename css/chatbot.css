@@ -133,7 +133,6 @@
   visibility: hidden;
 }
 
-
 /* Animación de aparición mejorada */
 .chat-minimized.show {
   opacity: 1;
@@ -429,7 +428,8 @@
 
 /* Animación de pulso mejorada para el botón minimizado */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
@@ -452,8 +452,7 @@
 
 /* RESPONSIVE MEJORADO PARA MÓVILES */
 @media (max-width: 768px) {
-
-    .container {
+  .container {
     position: fixed !important;
     bottom: 0;
     right: 0;
@@ -461,15 +460,18 @@
     top: 0;
     width: 100% !important;
     max-width: 100% !important;
-    height: 95dvh;
+    height: 100vh; /* Cambiar a vh normal */
+    height: calc(var(--vh, 1vh) * 100); /* Usar variable CSS personalizada */
     z-index: 9999 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
   }
   .chat-demo {
-    height: 85dvh;
-    max-height: 85dvh;
+    height: 90vh;
+    height: calc(var(--vh, 1vh) * 90); /* Usar variable personalizada */
+    max-height: 90vh;
+    max-height: calc(var(--vh, 1vh) * 90);
     width: 95%;
     max-width: 95%;
     margin: 0;
@@ -480,7 +482,8 @@
 
   /* Animación específica para móvil - mejorada */
   .chat-demo.closing {
-    animation: shrinkToCornerMobile 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: shrinkToCornerMobile 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+      forwards;
   }
 
   .chat-header {
