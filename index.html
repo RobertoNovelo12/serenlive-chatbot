@@ -8,47 +8,91 @@
     <title>SerenLive - Bienestar Natural</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/chatbot.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
-                <li><a href="formulario.html">Contacto</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+  <nav>
+    <button class="hamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
+      <li><a href="formulario.html">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <section class="hero">
-        <div class="espacio"></div>
-        <div>
-            <h1>Serenlive</h1>
+<section class="hero">
+  <video autoplay muted loop playsinline class="hero-video">
+    <source src="img/flores.mp4" type="video/mp4">
+    Tu navegador no soporta videos.
+  </video>
 
-            <p>Vivir con serenidad</p>
-            <a href="#quienes-somos" class="cta-button-inf">Descubre Más <i class="fas fa-arrow-down"></i></a>
-        </div>
-    </section>
-
+  <div class="hero-content">
+    <h1>Serenlive</h1>
+    <p>Vivir con serenidad</p>
+    <a href="#quienes-somos" class="cta-button-inf" id="scrollToggleBtn">
+      <span>Descubre Más</span>
+      <i class="fas fa-arrow-down"></i>
+    </a>
+  </div>
+</section>
     <section id="quienes-somos">
-        <h2>¿Quiénes Somos?</h2>
-        <div class="contenido">
-            <p>Somos un equipo apasionado por la innovación y el bienestar integral, comprometidos con el desarrollo de soluciones naturales que transformen la manera en que las personas enfrentan el estrés y la ansiedad.</p>
+  <h2>¿Quiénes somos?</h2>
+  <div class="contenido">
+    <p>Somos un equipo comprometido con la innovación y el bienestar. Creamos soluciones naturales que ayudan a reducir el estrés y la ansiedad de forma efectiva y accesible.</p>
 
-            <p>Creemos en el poder de las plantas ancestrales como <strong>Valeriana officinalis</strong>, <strong>Passiflora incarnata</strong>, <strong>Melissa officinalis</strong> y <strong>hoja de naranja (Citrus sinensis)</strong>, cuya eficacia ha sido respaldada por años de uso tradicional. Estas plantas son la base de nuestro producto sublingual, diseñado para brindar alivio de forma rápida y efectiva.</p>
+    <p>Inspirados por el poder de plantas ancestrales como <strong>valeriana</strong>, <strong>passiflora</strong>, <strong>melissa</strong> y <strong>hoja de naranja</strong>, desarrollamos hemos integrado un sistema digital interactivo en forma de una aplicación móvil.</p>
 
-            <p>Además, hemos integrado un sistema digital interactivo en forma de una aplicación móvil que:</p>
-            <ul>
-                <li>Proporciona recomendaciones personalizadas según las necesidades específicas de cada usuario.</li>
-                <li>Monitorea el tratamiento a través de un calendario inteligente.</li>
-                <li>Ofrece recordatorios y seguimiento continuo para garantizar la mejor experiencia y resultados.</li>
-            </ul>
+    <div class="app-info">
+      <h3 class="tec-acom"> Tecnología que acompaña</h3>
+      <ul>
+        <li><strong>Recomendaciones personalizadas</strong> según tus necesidades.</li>
+        <li><strong>Calendario inteligente</strong> que monitorea tu tratamiento.</li>
+        <li><strong>Recordatorios y seguimiento</strong> para mejores resultados.</li>
+      </ul>
+    </div>
 
-            <p>Nuestro objetivo es acompañarte en tu camino hacia el equilibrio emocional y físico, combinando la sabiduría del pasado con la innovación del presente. ¡Estamos aquí para ayudarte a alcanzar una vida más tranquila y saludable! <span class="icon">🌿✨</span></p>
+    <p class="mensaje-final">Combinamos la sabiduría natural con tecnología moderna para ayudarte a alcanzar equilibrio emocional y bienestar duradero.</p>
+  </div>
+</section>
+    <!-- CHATBOT -->
+
+        <div class="container" id="chatContainer">
+        <div class="chat-demo">
+            <!-- Botón de cerrar -->
+            <button class="close-button" id="closeButton" onclick="minimizeChat()">×</button>
+            
+            <div class="chat-header">
+                <div class="bot-avatar">🤖</div>
+                <div>
+                    <div class="chat-title">Serenlive</div>
+                    <div class="chat-subtitle">En línea • Siempre disponible</div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot" style="animation-delay: 0.5s;">
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" class="input-field" placeholder="Escribe tu nombre..." id="nameInput">
+                <button class="send-button" onclick="sendName()">→</button>
+            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Chat minimizado - ahora con badge de notificación -->
+    <div class="chat-minimized" id="chatMinimized" onclick="maximizeChat()">
+        <div class="bot-icon">🤖</div>
+    </div>
 
     <section id="informacion">
         <h2>Beneficios de Nuestros Ingredientes</h2>
@@ -85,13 +129,20 @@
                 <li>Absorción sublingual para efecto rápido (15-20 minutos)</li>
                 <li>Sin efectos secundarios ni dependencia</li>
             </ul>
-            s
+        
             
             <div class="testimonials">
-                <h3>Lo que dicen nuestros clientes</h3>
-                <blockquote>"Este producto cambió mi vida. Después de años de ansiedad, finalmente encontré algo que funciona sin efectos secundarios. Lo recomiendo al 100%."</blockquote>
-                <blockquote>"La combinación del producto natural con la app de seguimiento es increíble. Puedo ver mi progreso y ajustar las dosis según mis necesidades."</blockquote>
+            <h3>Lo que dicen nuestros clientes</h3>
+            <div class="testimonial-card">
+                <p>"Este producto cambió mi vida. Después de años de ansiedad, finalmente encontré algo que funciona sin efectos secundarios. Lo recomiendo al 100%."</p>
+                <footer>— Cliente satisfecho</footer>
             </div>
+            <div class="testimonial-card">
+                <p>"La combinación del producto natural con la app de seguimiento es increíble. Puedo ver mi progreso y ajustar las dosis según mis necesidades."</p>
+                <footer>— Usuario feliz</footer>
+            </div>
+            </div>
+
             
             <div class="button-container">
                 <a href="#" class="buy-button"><i class="fas fa-shopping-cart"></i> Comprar Ahora</a>
@@ -105,5 +156,7 @@
     </div>
 
     <script src="js/efectos.js"></script>
+    <script src="js/animaciones.js"></script>
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>

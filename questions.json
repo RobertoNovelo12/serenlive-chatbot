@@ -1,0 +1,291 @@
+[
+  {
+    "id": "estado_animo",
+    "message": "Encantado/a de saludarte. ¿Cómo te has sentido en los últimos días?",
+    "type": "input",
+    "keywords": [
+      "ansioso", "ansiosa", "ansied", "ansiedad", "nervioso", "nerviosa", "nervios",
+      "estresado", "estresada", "estres", "estrés", "tenso", "tensa", "tension", "tensión",
+      "deprimido", "deprimida", "depre", "depression", "triste", "tristeza", "melancolico", "melancólico",
+      "abrumado", "abrumada", "agobiado", "agobiada", "sobrepasado", "sobrepasada",
+      "mal", "regular", "no muy bien", "fatal", "horrible", "terrible", "pesimo", "pésimo",
+      "cansado", "cansada", "agotado", "agotada", "exhausto", "exhausta", "fatigado", "fatigada",
+      "preocupado", "preocupada", "inquieto", "inquieta", "intranquilo", "intranquila",
+      "decaido", "decaída", "desanimado", "desanimada", "desmotivado", "desmotivada",
+      "irritable", "irritado", "irritada", "molesto", "molesta", "enojado", "enojada"
+    ],
+    "confusion_keywords": ["no se", "no sé", "no entiendo", "no comprendo", "que", "qué", "como", "cómo", "nose"],
+    "alternative_question": "Te entiendo, déjame preguntarte de otra forma: En una escala del 1 al 10, ¿qué tan bien te has sentido esta semana? (1 = muy mal, 10 = excelente)",
+    "respuesta_si_detecta": "Gracias por compartirlo. Es completamente válido sentirse así, estoy aquí para ayudarte 💚",
+    "respuesta_confusion": "No te preocupes, es normal no saber cómo expresarlo.",
+    "scoring": {
+      "high_stress": ["ansioso", "estresado", "deprimido", "abrumado", "mal", "fatal", "horrible", "terrible"],
+      "medium_stress": ["nervioso", "tenso", "cansado", "preocupado", "regular", "irritable"],
+      "low_stress": ["bien", "tranquilo", "relajado", "normal", "ok"]
+    },
+    "next": "frecuencia_estres"
+  },
+  {
+    "id": "frecuencia_estres",
+    "message": "¿Con qué frecuencia has sentido estrés o ansiedad esta semana?",
+    "type": "options",
+    "options": [
+      { "text": "Siempre (casi todos los días)", "value": "siempre" },
+      { "text": "A menudo (3‑4 días)", "value": "a_menudo" },
+      { "text": "A veces (1‑2 días)", "value": "a_veces" },
+      { "text": "Nunca", "value": "nunca" }
+    ],
+    "keywords": {
+      "siempre": [
+        "siempre", "todo el tiempo", "constantemente", "continuamente", "permanentemente",
+        "todos los dias", "todos los días", "cada dia", "cada día", "diariamente", "a diario",
+        "casi todos los dias", "casi todos los días", "casi siempre", "muy seguido",
+        "7 dias", "7 días", "toda la semana", "durante la semana", "5 dias", "6 dias", "5 días", "6 días",
+        "mucho", "muchisimo", "muchísimo", "demasiado", "excesivo", "intenso"
+      ],
+      "a_menudo": [
+        "a menudo", "frecuentemente", "seguido", "varias veces", "varios dias", "varios días",
+        "3 dias", "4 dias", "3 días", "4 días", "tres dias", "cuatro dias", "tres días", "cuatro días",
+        "casi la mitad", "mitad de la semana", "algunas veces", "bastante", "regularmente",
+        "la mayoria", "la mayoría", "mas de la mitad", "más de la mitad"
+      ],
+      "a_veces": [
+        "a veces", "de vez en cuando", "ocasionalmente", "esporadicamente", "esporádicamente",
+        "1 dia", "2 dias", "1 día", "2 días", "un dia", "dos dias", "un día", "dos días",
+        "poco", "poquito", "no mucho", "rara vez", "casi nunca", "alguna vez",
+        "solo a veces", "sólo a veces", "muy poco", "pocas veces", "una que otra vez"
+      ],
+      "nunca": [
+        "nunca", "jamas", "jamás", "para nada", "nada", "cero", "0", "ni una vez",
+        "no he sentido", "no siento", "no me pasa", "no tengo", "tranquilo", "tranquila",
+        "relajado", "relajada", "bien", "muy bien", "perfecto", "genial", "excelente",
+        "sin estres", "sin estrés", "sin ansiedad", "calmado", "calmada", "en paz"
+      ]
+    },
+    "confusion_keywords": ["no se", "no sé", "no entiendo", "no comprendo", "que", "qué", "como", "cómo"],
+    "alternative_question": "Te lo explico mejor: ¿Cuántos días de esta semana te has sentido estresado o ansioso? Puedes responder con un número del 0 al 7.",
+    "respuesta_si_detecta": {
+      "siempre": "Parece que estás lidiando con un nivel alto de estrés. Vamos a ver cómo ayudarte mejor.",
+      "a_menudo": "Entiendo, has tenido varios días con estrés; sigamos analizando.",
+      "a_veces": "Gracias por compartir. Veamos cómo podemos darte más apoyo.",
+      "nunca": "¡Genial! Parece que tu nivel de estrés ha sido bajo esta semana."
+    },
+    "respuesta_confusion": "No te preocupes, vamos a simplificarlo.",
+    "scoring": {
+      "high_frequency": ["siempre"],
+      "medium_frequency": ["a_menudo"],
+      "low_frequency": ["a_veces", "nunca"]
+    },
+    "next": "sintomas"
+  },
+  {
+    "id": "sintomas",
+    "message": "¿Qué síntomas sueles tener cuando estás estresado o ansioso? (Ej. insomnio, tensión, dolor de cabeza...)",
+    "type": "input",
+    "keywords": [
+      "insomnio", "no duermo", "no puedo dormir", "me desvelo", "desvelo", "desvelado",
+      "dolor", "duele", "me duele", "dolor de cabeza", "jaqueca", "migraña", "migrana",
+      "tensión", "tension", "tenso", "tensa", "contractura", "contracturas", "rigidez",
+      "nervioso", "nerviosa", "nervios", "temblor", "tiemblo", "temblores",
+      "palpitaciones", "taquicardia", "corazón acelerado", "corazon acelerado", "late rapido",
+      "sudor", "sudo", "sudando", "transpiro", "sudoracion", "sudoración",
+      "falta de aire", "ahogo", "me ahogo", "respiracion agitada", "respiración agitada",
+      "nauseas", "náuseas", "mareo", "mareos", "mareado", "mareada", "vertigo", "vértigo",
+      "estomago", "estómago", "gastritis", "acidez", "dolor estomacal",
+      "irritabilidad", "irritable", "mal humor", "malhumor", "enojo facil", "enojo fácil",
+      "concentracion", "concentración", "no me concentro", "despistado", "despistada",
+      "fatiga", "cansancio", "agotamiento", "sin energia", "sin energía", "debilidad"
+    ],
+    "confusion_keywords": ["no se", "no sé", "no entiendo", "no comprendo", "que", "qué", "como", "cómo", "cuales", "cuáles"],
+    "alternative_question": "Cuando te sientes mal o estresado, ¿tu cuerpo reacciona de alguna manera? Por ejemplo: ¿te duele algo? ¿no puedes dormir? ¿te late rápido el corazón?",
+    "respuesta_si_detecta": "Esos síntomas son comunes y pueden mejorar con apoyo y hábitos saludables. Vamos bien.",
+    "respuesta_confusion": "Te ayudo a identificarlos.",
+    "scoring": {
+      "physical_symptoms": ["dolor", "tension", "palpitaciones", "sudor", "temblor", "mareo", "estomago"],
+      "sleep_symptoms": ["insomnio", "no duermo", "desvelo"],
+      "cognitive_symptoms": ["concentracion", "despistado", "irritable"]
+    },
+    "next": "uso_producto"
+  },
+  {
+    "id": "uso_producto",
+    "message": "¿Has utilizado Serenlive antes o sería tu primera vez?",
+    "type": "options",
+    "options": [
+      { "text": "Sí, ya lo he tomado", "value": "usado" },
+      { "text": "No, es mi primera vez", "value": "primera_vez" }
+    ],
+    "keywords": {
+      "usado": ["si", "sí", "ya", "antes", "he tomado", "he usado", "conozco", "uso", "tomo"],
+      "primera_vez": ["no", "nunca", "primera vez", "nuevo", "nueva", "no conozco", "no he usado"]
+    },
+    "confusion_keywords": ["no se", "no sé", "que es", "qué es"],
+    "alternative_question": "Serenlive es un producto natural que ayuda con el estrés y la ansiedad. ¿Ya lo conocías o es la primera vez que escuchas de él?",
+    "respuesta_si_detecta": {
+      "usado": "Gracias por compartir tu experiencia previa.",
+      "primera_vez": "¡Bienvenido/a! Serenlive está diseñado para ayudarte de forma natural en momentos de tensión."
+    },
+    "respuesta_confusion": "Te explico qué es Serenlive.",
+    "next": {
+      "usado": "frecuencia_uso",
+      "primera_vez": "rutina_sueno"
+    }
+  },
+  {
+    "id": "frecuencia_uso",
+    "message": "Si ya lo has usado, ¿con qué frecuencia lo tomas?",
+    "type": "input",
+    "keywords": [
+      "diario", "todos los dias", "todos los días", "cada dia", "cada día", "a diario",
+      "cuando lo necesito", "cuando me siento mal", "segun necesite", "según necesite",
+      "a veces", "de vez en cuando", "ocasionalmente", "esporadicamente", "esporádicamente",
+      "seguido", "frecuente", "frecuentemente", "regularmente", "regular",
+      "rara vez", "casi nunca", "pocas veces", "muy poco", "poco"
+    ],
+    "confusion_keywords": ["no se", "no sé", "no recuerdo", "no me acuerdo"],
+    "alternative_question": "¿Lo tomas todos los días o solo cuando te sientes mal?",
+    "respuesta_si_detecta": "Gracias por compartir tu ritmo de consumo. Nos ayuda a entender mejor cómo te acompaña Serenlive.",
+    "respuesta_confusion": "No te preocupes, es normal no recordar exactamente.",
+    "scoring": {
+      "regular_user": ["diario", "todos los dias", "frecuentemente", "regularmente"],
+      "occasional_user": ["cuando lo necesito", "a veces", "ocasionalmente", "poco"]
+    },
+    "next": "efectividad"
+  },
+  {
+    "id": "efectividad",
+    "message": "¿Te ha funcionado Serenlive? ¿Has notado mejoras?",
+    "type": "input",
+    "keywords": [
+      "sí", "si", "yes", "claro", "por supuesto", "definitivamente", "seguro",
+      "mejor", "mejore", "mejoré", "mejoria", "mejoría", "me siento mejor",
+      "relajado", "relajada", "mas relajado", "más relajado", "tranquilo", "tranquila",
+      "duermo", "duermo mejor", "descanso", "descanso mejor", "mejor sueño",
+      "efectivo", "eficaz", "funciona", "me funciona", "me ayuda", "ayuda",
+      "bien", "muy bien", "excelente", "genial", "perfecto", "increible", "increíble",
+      "calmo", "calma", "sereno", "serena", "paz", "en paz", "pacifico", "pacífico",
+      "menos estres", "menos estrés", "menos ansiedad", "mas control", "más control"
+    ],
+    "confusion_keywords": ["no se", "no sé", "no estoy seguro", "no estoy segura", "tal vez", "quizas", "quizás"],
+    "alternative_question": "¿Dirías que te sientes igual, mejor o peor desde que usas Serenlive?",
+    "respuesta_si_detecta": "¡Qué bien escuchar eso! Nos alegra que Serenlive esté contribuyendo a tu bienestar.",
+    "respuesta_confusion": "Es normal tener dudas, cada persona responde diferente.",
+    "scoring": {
+      "effective": ["mejor", "funciona", "ayuda", "efectivo", "tranquilo", "menos estres"],
+      "somewhat_effective": ["un poco", "algo", "regular"],
+      "not_effective": ["no", "igual", "peor", "no funciona"]
+    },
+    "next": "rutina_sueno"
+  },
+  {
+    "id": "rutina_sueno",
+    "message": "¿Cómo está tu sueño últimamente?",
+    "type": "input",
+    "keywords": [
+      "mal", "terrible", "horrible", "pesimo", "pésimo", "fatal", "muy mal",
+      "insomnio", "no duermo", "no puedo dormir", "me cuesta dormir", "dificil dormir", "difícil dormir",
+      "me despierto", "despierto", "me levanto", "interrumpido", "cortado", "fragmentado",
+      "no duermo", "duermo poco", "pocas horas", "no descanso", "mal descanso",
+      "interrumpido", "me interrumpen", "sueno ligero", "sueño ligero", "despierto facil", "despierto fácil",
+      "pesadillas", "mal sueño", "sueños raros", "inquieto", "inquieta", "doy vueltas",
+      "madrugada", "me desvelo", "desvelo", "trasnocho", "no tengo sueño",
+      "cansado", "cansada", "agotado", "agotada", "sin energia", "sin energía"
+    ],
+    "confusion_keywords": ["no se", "no sé", "normal", "como siempre", "cómo siempre"],
+    "alternative_question": "¿Duermes bien por las noches o te cuesta trabajo dormir?",
+    "respuesta_si_detecta": "Dormir bien es clave para manejar el estrés. Podemos ayudarte a crear una mejor rutina.",
+    "respuesta_confusion": "El sueño es muy importante para el bienestar.",
+    "scoring": {
+      "poor_sleep": ["mal", "insomnio", "no duermo", "interrumpido", "pesadillas"],
+      "fair_sleep": ["regular", "a veces", "depende"],
+      "good_sleep": ["bien", "normal", "duermo bien", "descanso"]
+    },
+    "next": "actividades_relajacion"
+  },
+  {
+    "id": "actividades_relajacion",
+    "message": "¿Realizas actividades para relajarte? (Ej. meditar, hacer ejercicio, caminar, etc.)",
+    "type": "input",
+    "keywords": [
+      "no", "nunca", "jamas", "jamás", "para nada", "nada", "ninguna",
+      "no tengo tiempo", "sin tiempo", "muy ocupado", "muy ocupada", "no me da tiempo",
+      "se me olvida", "se me ovlida", "no me acuerdo", "no recuerdo",
+      "no se como", "no sé cómo", "no se que hacer", "no sé qué hacer",
+      "me da pereza", "pereza", "flojera", "no me motiva", "aburrido", "aburrida",
+      "no funciona", "no me sirve", "no me gusta", "no disfruto",
+      "poco", "muy poco", "rara vez", "casi nunca", "de vez en cuando"
+    ],
+    "confusion_keywords": ["no se", "no sé", "que actividades", "qué actividades", "cuales", "cuáles", "como", "cómo"],
+    "alternative_question": "¿Haces algo especial cuando te sientes estresado? Por ejemplo: salir a caminar, escuchar música, hablar con alguien...",
+    "respuesta_si_detecta": "Es normal. A veces cuesta, pero con pequeños cambios diarios se puede lograr mucho. 🌱",
+    "respuesta_confusion": "Te ayudo con algunas ideas simples.",
+    "scoring": {
+      "no_activities": ["no", "nunca", "nada", "no tengo tiempo"],
+      "some_activities": ["a veces", "poco", "de vez en cuando"],
+      "regular_activities": ["si", "sí", "ejercicio", "camino", "medito"]
+    },
+    "next": "alimentacion"
+  },
+  {
+    "id": "alimentacion",
+    "message": "¿Cómo ha sido tu alimentación últimamente?",
+    "type": "input",
+    "keywords": [
+      "mal", "terrible", "horrible", "pesima", "pésima", "fatal", "muy mal",
+      "desordenada", "desorden", "sin orden", "caotica", "caótica", "irregular",
+      "comida chatarra", "chatarra", "comida rapida", "comida rápida", "fast food",
+      "saltos", "me salto comidas", "no como", "como poco", "ayuno", "sin desayunar",
+      "dulces", "azucar", "azúcar", "mucha azucar", "mucho dulce", "golosinas",
+      "grasa", "grasosa", "frita", "frituras", "poco saludable", "nada saludable",
+      "ansiedad", "como por ansiedad", "como mucho", "atracones", "atracon", "atracón",
+      "sin verduras", "sin frutas", "procesados", "enlatados", "comida congelada",
+      "alcohol", "bebida", "tomo mucho", "cerveza", "vino", "licor"
+    ],
+    "confusion_keywords": ["no se", "no sé", "normal", "como siempre", "cómo siempre"],
+    "alternative_question": "¿Comes bien o sientes que tu alimentación no es muy saludable?",
+    "respuesta_si_detecta": "La alimentación influye mucho en cómo nos sentimos. Tal vez podríamos mejorarla poco a poco.",
+    "respuesta_confusion": "La alimentación es parte importante del bienestar.",
+    "scoring": {
+      "poor_diet": ["mal", "chatarra", "desordenada", "dulces", "alcohol"],
+      "fair_diet": ["regular", "a veces", "podria mejorar", "podría mejorar"],
+      "good_diet": ["bien", "saludable", "verduras", "frutas"]
+    },
+    "next": "intensidad_necesidad"
+  },
+  {
+    "id": "intensidad_necesidad",
+    "message": "¿Dirías que necesitas apoyo ocasional o constante para manejar el estrés?",
+    "type": "input",
+    "keywords": [
+      "constante", "todo el tiempo", "siempre", "permanente", "continuo", "continúo",
+      "diario", "todos los dias", "todos los días", "cada dia", "cada día",
+      "mucho apoyo", "bastante apoyo", "apoyo frecuente", "apoyo regular",
+      "intenso", "fuerte", "alto nivel", "muy estresado", "muy estresada",
+      "no puedo solo", "no puedo sola", "necesito ayuda", "requiero apoyo"
+    ],
+    "confusion_keywords": ["no se", "no sé", "depende", "a veces si a veces no"],
+    "alternative_question": "¿Sientes que necesitas ayuda todos los días o solo de vez en cuando?",
+    "respuesta_si_detecta": "Gracias por compartirlo. Saber esto nos ayuda a personalizar mejor la recomendación.",
+    "respuesta_confusion": "Es normal no estar seguro, vamos a analizar tu información.",
+    "scoring": {
+      "high_need": ["constante", "siempre", "mucho", "intenso", "no puedo solo"],
+      "medium_need": ["frecuente", "seguido", "bastante"],
+      "low_need": ["ocasional", "a veces", "poco", "de vez en cuando"]
+    },
+    "next": "recomendacion_final"
+  },
+{
+  "id": "recomendacion_final",
+  "message": "¡Perfecto! He recopilado toda tu información. ¿Te gustaría recibir tu recomendación personalizada de Serenlive ahora?",
+  "type": "options",
+  "options": [
+    { "text": "Sí, dame mi recomendación", "value": "si_recomendacion" },
+    { "text": "Tengo otra pregunta antes", "value": "mas_preguntas" }
+  ],
+  "keywords": {
+    "si_recomendacion": ["si", "sí", "dale", "adelante", "perfecto", "genial"],
+    "mas_preguntas": ["no", "espera", "tengo pregunta", "duda"]
+  },
+  "closing_message": "Recuerda que Serenlive está hecho con ingredientes 100% naturales..."
+}
+]
