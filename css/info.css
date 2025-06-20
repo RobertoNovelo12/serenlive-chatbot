@@ -200,7 +200,11 @@ header nav > ul li a.active::after {
   display: block;
   height: 3px;
   width: 100%;
+<<<<<<< HEAD
   background: #3c4c3c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
   border-radius: 3px;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-origin: center;
@@ -209,7 +213,11 @@ header nav > ul li a.active::after {
 /* Animación hamburguesa activa */
 .hamburger.active span:nth-child(1) {
   transform: translateY(8.5px) rotate(45deg);
+<<<<<<< HEAD
   background: #3c4c3c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 }
 
 .hamburger.active span:nth-child(2) {
@@ -219,7 +227,11 @@ header nav > ul li a.active::after {
 
 .hamburger.active span:nth-child(3) {
   transform: translateY(-8.5px) rotate(-45deg);
+<<<<<<< HEAD
   background: #3c4c3c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 }
 
 /* ESTILOS RESPONSIVE DEL MENÚ */
@@ -447,7 +459,11 @@ header nav > ul li a.active::after {
   display: block;
   height: 3px;
   width: 100%;
+<<<<<<< HEAD
   background: #5c6c5c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
   border-radius: 3px;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-origin: center;
@@ -456,7 +472,11 @@ header nav > ul li a.active::after {
 /* Animación hamburguesa activa */
 .hamburger.active span:nth-child(1) {
   transform: translateY(8.5px) rotate(45deg);
+<<<<<<< HEAD
   background: #5c6c5c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 }
 
 .hamburger.active span:nth-child(2) {
@@ -466,7 +486,11 @@ header nav > ul li a.active::after {
 
 .hamburger.active span:nth-child(3) {
   transform: translateY(-8.5px) rotate(-45deg);
+<<<<<<< HEAD
   background: #5c6c5c;
+=======
+  background: #333;
+>>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 }
 
 /* BRAND NAME - Para móvil */
