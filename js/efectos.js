@@ -147,8 +147,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Función para manejar el auto-hide del header
+  // Función para manejar el auto-hide del header - SOLO EN MÓVIL
   function handleHeaderAutoHide() {
+    // IMPORTANTE: Solo ejecutar en dispositivos móviles
+    if (!isMobile()) {
+      // En desktop, asegurar que el header siempre esté visible
+      if (isHeaderHidden) {
+        toggleHeaderVisibility(false);
+      }
+      return;
+    }
+    
     const currentScrollY = window.scrollY;
     const scrollDifference = Math.abs(currentScrollY - lastScrollY);
     
@@ -214,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const scrollY = window.scrollY;
 
-    // Manejar auto-hide del header
+    // Manejar auto-hide del header (solo en móvil)
     handleHeaderAutoHide();
 
     // NO aplicar el efecto si no hay scroll
@@ -333,11 +342,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const autoHideTransform = isHeaderHidden ? "translateY(-100%)" : "translateY(0)";
         const animationTransform = `translateY(${translateY}px) scale(${scale})`;
         
-        // Si el header está oculto, solo aplicar el auto-hide
-        if (isHeaderHidden) {
+        // En desktop, nunca aplicar auto-hide
+        if (!isCurrentlyMobile) {
           nav.style.transform = animationTransform;
         } else {
-          nav.style.transform = animationTransform;
+          // En móvil, aplicar auto-hide si está oculto
+          if (isHeaderHidden) {
+            nav.style.transform = animationTransform;
+          } else {
+            nav.style.transform = animationTransform;
+          }
         }
       }
     });
@@ -351,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-    // Mostrar header si está oculto
+    // Mostrar header si está oculto (solo relevante en móvil)
     if (isHeaderHidden) {
       toggleHeaderVisibility(false);
     }
@@ -424,6 +438,13 @@ document.addEventListener("DOMContentLoaded", function () {
       hasCompletedInitialAnimation = false;
       isFirstHide = true;
       lastScrollY = 0;
+      
+      // Si cambiamos a desktop, asegurar que el header esté visible
+      if (!isCurrentlyMobile && isHeaderHidden) {
+        header.style.transform = "translateY(0)";
+        header.classList.remove("header-hidden");
+        isHeaderHidden = false;
+      }
       
       // Esperar un poco para que el resize se complete
       setTimeout(() => {
