@@ -5,10 +5,6 @@ if ('scrollRestoration' in history) {
 
 // Configuración inicial crítica
 document.documentElement.style.scrollBehavior = "auto";
-<<<<<<< HEAD
-=======
-window.scrollTo(0, 0);
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 
 document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector("header");
@@ -19,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let ticking = false;
   let isInitialized = false;
   let transitionsEnabled = false;
-<<<<<<< HEAD
   
   // Variables para control de auto-hide
   let lastScrollY = 0;
@@ -28,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let isFirstHide = true;
   const SCROLL_THRESHOLD = 10; // Mínimo desplazamiento para activar hide/show
   const ANIMATION_COMPLETE_THRESHOLD = 700; // Scroll donde termina la animación completa del header
-=======
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
 
   // Utilidades
   function isMobile() {
@@ -77,11 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Actualizar estado basado en posición actual del scroll
         updateHeaderState();
-<<<<<<< HEAD
       }, 50);
-=======
-      }, 50); // Reducido de 100ms a 50ms
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
     });
   }
 
@@ -116,14 +105,11 @@ document.addEventListener("DOMContentLoaded", function () {
       navUl.style.gap = "20px";
       header.style.padding = "15px 20px";
     }
-<<<<<<< HEAD
     
     // Inicializar estado del header con transición suave
     header.style.transition = "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
     header.style.transform = "translateY(0)";
     header.style.willChange = "transform"; // Optimización para GPU
-=======
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
   }
 
   // Nueva función para habilitar transiciones
@@ -134,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add('transitions-enabled');
   }
 
-<<<<<<< HEAD
   // Función para ocultar/mostrar header
   function toggleHeaderVisibility(shouldHide) {
     if (isHeaderHidden === shouldHide) return;
@@ -248,38 +233,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateHeaderStyles(progress, isCurrentlyMobile);
   }
 
-=======
-  // Animación del header en scroll - OPTIMIZADA
-function updateHeaderState() {
-  if (!isInitialized) {
-    return;
-  }
-
-  const hamburger = document.querySelector(".hamburger");
-  if (hamburger && hamburger.classList.contains("active")) {
-    return;
-  }
-
-  const scrollY = window.scrollY;
-
-  // NO aplicar el efecto si no hay scroll
-  if (scrollY === 0) {
-    return;
-  }
-
-  const maxScroll = 200;
-  const progress = Math.min(scrollY / maxScroll, 1);
-  const isCurrentlyMobile = isMobile();
-
-  if (isCurrentlyMobile) {
-    updateBrandName(progress);
-  }
-
-  updateHeaderStyles(progress, isCurrentlyMobile);
-}
-
-
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
   // Nueva función para manejar el nombre de marca
   function updateBrandName(progress) {
     let brandName = header.querySelector(".brand-name");
@@ -375,7 +328,6 @@ function updateHeaderState() {
           0 ${shadowBlur * 0.4}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity}),
           inset 0 1px 0 rgba(255, 255, 255, ${insetOpacity})
         `;
-<<<<<<< HEAD
         
         // Aplicar transform combinando auto-hide y animación normal
         const autoHideTransform = isHeaderHidden ? "translateY(-100%)" : "translateY(0)";
@@ -387,9 +339,6 @@ function updateHeaderState() {
         } else {
           nav.style.transform = animationTransform;
         }
-=======
-        nav.style.transform = `translateY(${translateY}px) scale(${scale})`;
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
       }
     });
   }
@@ -402,14 +351,11 @@ function updateHeaderState() {
 
     savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-<<<<<<< HEAD
     // Mostrar header si está oculto
     if (isHeaderHidden) {
       toggleHeaderVisibility(false);
     }
 
-=======
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
     requestAnimationFrame(() => {
       hamburger.classList.add("active");
       navLinks.classList.add("show");
@@ -473,7 +419,6 @@ function updateHeaderState() {
       transitionsEnabled = false;
       isInitialized = false;
       
-<<<<<<< HEAD
       // Reset auto-hide state
       isHeaderHidden = false;
       hasCompletedInitialAnimation = false;
@@ -484,12 +429,6 @@ function updateHeaderState() {
       setTimeout(() => {
         initializeHeaderSmoothly();
       }, 50);
-=======
-      // Esperar un poco para que el resize se complete
-      setTimeout(() => {
-        initializeHeaderSmoothly();
-      }, 50); // Reducido de 100ms
->>>>>>> 72b7a7ab7e4d140805bcfcaefeaa82eaabdc049f
     }
 
     wasInMobile = isCurrentlyMobile;
