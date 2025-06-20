@@ -39,6 +39,11 @@ body {
   padding-top: 50px;
 }
 
+::selection {
+  background-color: #27ae60;
+  color: white;
+}
+
 header {
   position: fixed;
   top: 0;

@@ -40,6 +40,11 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background-color: #27ae60;
+  color: white;
+}
+
 header {
   position: fixed;
   top: 0;

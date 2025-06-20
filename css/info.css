@@ -28,6 +28,11 @@ html {
   scroll-behavior: auto; /* CAMBIO: Inicia en auto, JS lo cambia después */
 }
 
+::selection {
+  background-color: #27ae60;
+  color: white;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   background-color: #f8f9fa;
