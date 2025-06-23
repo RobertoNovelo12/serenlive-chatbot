@@ -96,24 +96,59 @@ export function renderButtonOptions(options, callback) {
   }
 }
 
+// 🔥 FUNCIÓN MEJORADA - Usa tu animación CSS
 export function showTyping() {
-  const typingIndicator = document.createElement("div");
-  typingIndicator.className = "typing-indicator";
-  typingIndicator.id = "typing-indicator";
-  typingIndicator.innerText = "Escribiendo...";
-
+  console.log('💭 Mostrando indicador de typing');
+  
   const chatContainer = document.getElementById("chatMessages") ||
     document.getElementById("chat");
-
-  if (chatContainer && !document.getElementById("typing-indicator")) {
-    chatContainer.appendChild(typingIndicator);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  
+  if (!chatContainer) {
+    console.error("❌ No se encontró el contenedor de mensajes para typing");
+    return;
   }
+
+  // Remover typing anterior si existe
+  hideTyping();
+
+  // Crear elemento de typing con tu estructura
+  const typingMessage = document.createElement('div');
+  typingMessage.className = 'message bot';
+  typingMessage.id = 'typing-indicator';
+  typingMessage.style.animationDelay = "0s";
+  
+  const avatarDiv = document.createElement("div");
+  avatarDiv.className = "message-avatar bot-msg-avatar";
+  avatarDiv.textContent = "🤖";
+
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content";
+  
+  // 🎨 Usar tu animación CSS de typing
+  contentDiv.innerHTML = `
+    <div class="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+
+  typingMessage.appendChild(avatarDiv);
+  typingMessage.appendChild(contentDiv);
+  
+  chatContainer.appendChild(typingMessage);
+  
+  // Scroll automático
+  setTimeout(() => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 50);
 }
 
+// 🔥 FUNCIÓN MEJORADA - Más robusta
 export function hideTyping() {
   const typingIndicator = document.getElementById("typing-indicator");
   if (typingIndicator) {
+    console.log('🚫 Ocultando indicador de typing');
     typingIndicator.remove();
   }
 }

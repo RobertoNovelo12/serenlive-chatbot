@@ -1,7 +1,7 @@
 import { questions, questionMap, currentQuestionIndex, userData, setCurrentQuestionIndex, incrementQuestionIndex } from "../core/state.js";
 import { renderBotMessage } from "../ui/render.js";
 import { disableInput, enableInput } from "../ui/input.js";
-import { handleRecommendationGeneration } from "./recommendation.js";
+import { handleRecommendationGeneration } from "./recommendation-handler.js";
 
 export function nextQuestionByIndex() {
   console.log("🔄 nextQuestionByIndex called, current index:", currentQuestionIndex);

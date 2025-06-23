@@ -1,3 +1,6 @@
+// analyzer.js - Versión corregida que usa correctamente el JSON
+import { recommendationEngine } from '../handlers/recommendations.js'
+
 export class SerenliveAnalyzer {
   constructor() {
     this.weightedScores = {
@@ -8,60 +11,13 @@ export class SerenliveAnalyzer {
       lifestyle: 0,
       need_intensity: 0
     };
-    this.patterns = [];
-    this.riskFactors = [];
+    this.lifestyleFactors = {};
   }
 
-  // Análisis de texto con NLP básico y detección de emociones
-analyzeText(text, keywords = [], emotionalKeywords = {}) {
-  const normalizedText = this.normalizeText(text);
-  const words = normalizedText.split(/\s+/);
-  
-  let matches = [];
-  let intensity = 0;
-  let emotionalState = 'neutral';
-  
-  // Validar que keywords sea un array
-  if (!Array.isArray(keywords)) {
-    keywords = [];
-  }
-  
-  // Detección de keywords con contexto
-  for (let keyword of keywords) {
-    const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-    const keywordMatches = normalizedText.match(regex);
-    if (keywordMatches) {
-      matches.push({
-        keyword,
-        count: keywordMatches.length,
-        intensity: this.calculateKeywordIntensity(keyword, normalizedText)
-      });
-    }
-  }
-  
-  // Análisis emocional
-  if (emotionalKeywords.negative && Array.isArray(emotionalKeywords.negative)) {
-    const negativeCount = emotionalKeywords.negative.filter(word => 
-      normalizedText.includes(word)).length;
-    if (negativeCount > 0) emotionalState = 'negative';
-  }
-  
-  if (emotionalKeywords.positive && Array.isArray(emotionalKeywords.positive)) {
-    const positiveCount = emotionalKeywords.positive.filter(word => 
-      normalizedText.includes(word)).length;
-    if (positiveCount > 0) emotionalState = 'positive';
-  }
-  
-  return {
-    matches,
-    emotionalState,
-    intensity: this.calculateOverallIntensity(matches),
-    wordCount: words.length,
-    sentiment: this.analyzeSentiment(normalizedText)
-  };
-}
-
+  // Normalizar texto - mejorado para mejor matching
   normalizeText(text) {
+    if (!text) return '';
+    
     return text.toLowerCase()
       .replace(/[áàäâ]/g, 'a')
       .replace(/[éèëê]/g, 'e')
@@ -74,537 +30,646 @@ analyzeText(text, keywords = [], emotionalKeywords = {}) {
       .trim();
   }
 
-  calculateKeywordIntensity(keyword, text) {
-    // Palabras intensificadoras
-    const intensifiers = ['muy', 'mucho', 'demasiado', 'bastante', 'super', 'extremadamente'];
-    const diminishers = ['poco', 'algo', 'un poco', 'ligeramente', 'apenas'];
+  // Buscar keywords en el texto - mejorado
+  findKeywordsInText(text, keywords) {
+    if (!text || !Array.isArray(keywords)) return [];
     
-    let intensity = 1;
+    const normalizedText = this.normalizeText(text);
+    const foundKeywords = [];
     
-    for (let intensifier of intensifiers) {
-      if (text.includes(intensifier + ' ' + keyword) || text.includes(keyword + ' ' + intensifier)) {
-        intensity *= 1.5;
+    keywords.forEach(keyword => {
+      const normalizedKeyword = this.normalizeText(keyword);
+      if (normalizedText.includes(normalizedKeyword)) {
+        foundKeywords.push(keyword);
       }
-    }
-    
-    for (let diminisher of diminishers) {
-      if (text.includes(diminisher + ' ' + keyword) || text.includes(keyword + ' ' + diminisher)) {
-        intensity *= 0.7;
-      }
-    }
-    
-    return Math.min(intensity, 3); // Cap at 3x intensity
-  }
-
-  calculateOverallIntensity(matches) {
-    if (matches.length === 0) return 0;
-    const totalIntensity = matches.reduce((sum, match) => sum + match.intensity * match.count, 0);
-    return totalIntensity / matches.length;
-  }
-
-  analyzeSentiment(text) {
-    const positiveWords = ['bien', 'mejor', 'genial', 'excelente', 'tranquilo', 'relajado', 'feliz', 'bueno'];
-    const negativeWords = ['mal', 'terrible', 'horrible', 'estresado', 'ansioso', 'preocupado', 'triste', 'agotado'];
-    
-    let score = 0;
-    positiveWords.forEach(word => {
-      if (text.includes(word)) score += 1;
-    });
-    negativeWords.forEach(word => {
-      if (text.includes(word)) score -= 1;
     });
     
-    return score > 0 ? 'positive' : score < 0 ? 'negative' : 'neutral';
+    return foundKeywords;
   }
 
-  // Análisis específico por pregunta
-analyzeResponse(userInput, questionData) {
-  const safeInput = this.normalizeText(userInput);
-  const safeQuestionData = questionData || {};
-  const questionId = safeQuestionData.id;
+  // Método principal - CORREGIDO
+  analyzeResponse(userInput, questionData) {
+    console.log('Analizando respuesta:', userInput);
+    console.log('Datos de pregunta:', questionData);
 
-  // ⬇️ Aquí va el bloque para "recomendacion_final"
-  if (questionId === "recomendacion_final") {
-    const recommendation = this.generateRecommendation(); // genera el objeto
-    const message = this.generateFinalMessageFromRecommendation(recommendation, safeQuestionData); // genera el texto final
-    return message; // o usa tu método de mostrar texto si tienes uno
-  }
+    if (!questionData || !userInput) {
+      return { 
+        category: 'unknown', 
+        score: 0, 
+        responseMessage: 'No se pudo procesar la respuesta.' 
+      };
+    }
 
-  // ⬇️ Aquí sigue tu switch normal
-  switch (questionId) {
-    case 'estado_animo':
-      return this.analyzeMoodState(safeInput, safeQuestionData);
-    case 'frecuencia_estres':
-      return this.analyzeStressFrequency(safeInput, safeQuestionData);
-    case 'sintomas':
-      return this.analyzeSymptoms(safeInput, safeQuestionData);
-    case 'rutina_sueno':
-      return this.analyzeSleep(safeInput, safeQuestionData);
-    case 'actividades_relajacion':
-      return this.analyzeRelaxationActivities(safeInput, safeQuestionData);
-    case 'alimentacion':
-      return this.analyzeDiet(safeInput, safeQuestionData);
-    case 'intensidad_necesidad':
-      return this.analyzeNeedIntensity(safeInput, safeQuestionData);
-    default:
-      return "Gracias por tu respuesta.";
-  }
-}
+    const questionId = questionData.id;
 
-  analyzeMoodState(analysis, questionData) {
-    let score = 0;
-    let category = 'neutral';
+    // Caso especial para recomendación final
+    if (questionId === "recomendacion_final") {
+      const recommendation = this.generateRecommendation();
+      return recommendationEngine.generateFinalMessage(recommendation, questionData);
+    }
+
+    // 1. Verificar confusión PRIMERO
+    if (this.isConfused(userInput, questionData)) {
+      return {
+        isConfused: true,
+        alternativeQuestion: questionData.alternative_question,
+        responseMessage: questionData.respuesta_confusion || "No te preocupes, te ayudo a aclarar esto.",
+        nextQuestion: questionData.id // Mantener la misma pregunta
+      };
+    }
+
+    // 2. Analizar según el tipo de pregunta
+    const result = this.analyzeByQuestionType(userInput, questionData);
     
+    // 3. Agregar mensaje de respuesta del JSON
+    result.responseMessage = this.getResponseMessage(result, questionData);
+    
+    // 4. Determinar siguiente pregunta
+    result.nextQuestion = this.getNextQuestion(result, questionData);
+    
+    console.log('Resultado del análisis:', result);
+    
+    return result;
+  }
+
+  // Verificar confusión
+  isConfused(userInput, questionData) {
+    if (!questionData.confusion_keywords || !Array.isArray(questionData.confusion_keywords)) {
+      return false;
+    }
+    
+    const foundConfusionKeywords = this.findKeywordsInText(userInput, questionData.confusion_keywords);
+    console.log('Keywords de confusión encontradas:', foundConfusionKeywords);
+    return foundConfusionKeywords.length > 0;
+  }
+
+  // Analizar según el tipo de pregunta
+  analyzeByQuestionType(userInput, questionData) {
+    const questionId = questionData.id;
+    
+    console.log(`Analizando pregunta tipo: ${questionId}`);
+    
+    switch (questionId) {
+      case 'estado_animo':
+        return this.analyzeEstadoAnimo(userInput, questionData);
+        
+      case 'frecuencia_estres':
+        return this.analyzeFrecuenciaEstres(userInput, questionData);
+        
+      case 'sintomas':
+        return this.analyzeSintomas(userInput, questionData);
+        
+      case 'uso_producto':
+        return this.analyzeUsoProducto(userInput, questionData);
+        
+      case 'frecuencia_uso':
+        return this.analyzeFrecuenciaUso(userInput, questionData);
+        
+      case 'efectividad':
+        return this.analyzeEfectividad(userInput, questionData);
+        
+      case 'rutina_sueno':
+        return this.analyzeRutinaSueno(userInput, questionData);
+        
+      case 'actividades_relajacion':
+        return this.analyzeActividadesRelajacion(userInput, questionData);
+        
+      case 'alimentacion':
+        return this.analyzeAlimentacion(userInput, questionData);
+        
+      case 'intensidad_necesidad':
+        return this.analyzeIntensidadNecesidad(userInput, questionData);
+        
+      default:
+        return { category: 'unknown', score: 0 };
+    }
+  }
+
+  // Análisis específico para estado de ánimo
+  analyzeEstadoAnimo(userInput, questionData) {
+    // Primero buscar en keywords generales
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    if (foundKeywords.length > 0) {
+      // Determinar severidad basada en scoring
+      const scoring = questionData.scoring || {};
+      
+      if (this.hasKeywordsInCategory(foundKeywords, scoring.high_stress)) {
+        this.weightedScores.stress_level = 3;
+        return { category: 'high_stress', score: 3, foundKeywords };
+      } else if (this.hasKeywordsInCategory(foundKeywords, scoring.medium_stress)) {
+        this.weightedScores.stress_level = 2;
+        return { category: 'medium_stress', score: 2, foundKeywords };
+      } else if (this.hasKeywordsInCategory(foundKeywords, scoring.low_stress)) {
+        this.weightedScores.stress_level = 1;
+        return { category: 'low_stress', score: 1, foundKeywords };
+      } else {
+        // Keyword encontrada pero no en scoring, asumir stress medio
+        this.weightedScores.stress_level = 2;
+        return { category: 'medium_stress', score: 2, foundKeywords };
+      }
+    }
+    
+    return { category: 'neutral', score: 0, foundKeywords: [] };
+  }
+
+  // Análisis específico para frecuencia estrés
+  analyzeFrecuenciaEstres(userInput, questionData) {
+    const keywords = questionData.keywords || {};
+    
+    for (const [optionValue, optionKeywords] of Object.entries(keywords)) {
+      if (Array.isArray(optionKeywords)) {
+        const foundKeywords = this.findKeywordsInText(userInput, optionKeywords);
+        if (foundKeywords.length > 0) {
+          let score = this.getFrequencyScore(optionValue);
+          this.weightedScores.frequency = score;
+          
+          return {
+            category: optionValue,
+            score,
+            foundKeywords,
+            selectedOption: optionValue
+          };
+        }
+      }
+    }
+    
+    return { category: 'unknown', score: 0, foundKeywords: [] };
+  }
+
+  // Análisis específico para síntomas - CORREGIDO
+  analyzeSintomas(userInput, questionData) {
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    console.log('Keywords de síntomas encontradas:', foundKeywords);
+    
+    if (foundKeywords.length === 0) {
+      return { category: 'no_symptoms', score: 0, foundKeywords: [] };
+    }
+
+    // Analizar tipos de síntomas usando scoring
     const scoring = questionData.scoring || {};
+    const symptomTypes = {};
+    let totalSymptoms = foundKeywords.length; // Contar keywords totales encontradas
     
-    if (scoring.high_stress) {
-      const highStressMatches = scoring.high_stress.filter(keyword => 
-        analysis.matches.some(match => match.keyword === keyword));
-      if (highStressMatches.length > 0) {
-        score = 3;
-        category = 'high_stress';
+    // Clasificar síntomas por tipo
+    Object.entries(scoring).forEach(([symptomType, categoryKeywords]) => {
+      if (Array.isArray(categoryKeywords)) {
+        const matchedInCategory = foundKeywords.filter(keyword => 
+          categoryKeywords.some(catKeyword => 
+            this.normalizeText(keyword).includes(this.normalizeText(catKeyword)) ||
+            this.normalizeText(catKeyword).includes(this.normalizeText(keyword))
+          )
+        );
+        symptomTypes[symptomType] = matchedInCategory.length;
       }
+    });
+    
+    // Calcular severidad basada en total de keywords encontradas
+    let severity = 'symptoms_detected'; // Nueva categoría para asegurar respuesta
+    let score = 1;
+    
+    if (totalSymptoms >= 3) {
+      severity = 'high_symptoms';
+      score = 3;
+    } else if (totalSymptoms >= 2) {
+      severity = 'medium_symptoms';
+      score = 2;
+    } else if (totalSymptoms >= 1) {
+      severity = 'symptoms_detected';
+      score = 1;
     }
     
-    if (scoring.medium_stress && score === 0) {
-      const mediumStressMatches = scoring.medium_stress.filter(keyword => 
-        analysis.matches.some(match => match.keyword === keyword));
-      if (mediumStressMatches.length > 0) {
-        score = 2;
-        category = 'medium_stress';
-      }
-    }
+    this.weightedScores.symptoms = score;
     
-    if (scoring.low_stress && score === 0) {
-      const lowStressMatches = scoring.low_stress.filter(keyword => 
-        analysis.matches.some(match => match.keyword === keyword));
-      if (lowStressMatches.length > 0) {
-        score = 1;
-        category = 'low_stress';
-      }
-    }
-
-    this.weightedScores.stress_level = score;
+    console.log('Análisis de síntomas:', { severity, score, symptomTypes, totalSymptoms, foundKeywords });
     
     return {
-      ...analysis,
+      category: severity,
       score,
-      category,
-      interpretation: this.getStressInterpretation(category),
-      recommendations: this.getStressRecommendations(category)
-    };
-  }
-
-analyzeDiet(analysis, questionData) {
-  const { text = '', keywords = [] } = questionData;
-  const score = this.analyzeText(text, keywords);
-
-  if (score >= 2) {
-    analysis.diet = {
-      status: 'saludable',
-      message: 'Tu alimentación parece equilibrada y adecuada. ¡Sigue así!'
-    };
-  } else if (score === 1) {
-    analysis.diet = {
-      status: 'moderada',
-      message: 'Tu alimentación tiene algunos aspectos positivos, pero podría mejorar.'
-    };
-  } else {
-    analysis.diet = {
-      status: 'desequilibrada',
-      message: 'Tu alimentación podría estar afectando tu bienestar. Considera revisar tus hábitos nutricionales.'
-    };
-  }
-
-  return analysis;
-}
-
-analyzeNeedIntensity(analysis, questionData) {
-  const { text = '', keywords = [] } = questionData;
-  const score = this.analyzeText(text, keywords);
-
-  let intensity;
-  if (score >= 3) {
-    intensity = 'alta';
-  } else if (score === 2) {
-    intensity = 'media';
-  } else {
-    intensity = 'baja';
-  }
-
-  analysis.needIntensity = {
-    level: intensity,
-    message: {
-      alta: 'Parece que sientes una necesidad fuerte de apoyo o cambio. Es importante atender esto pronto.',
-      media: 'Tienes una necesidad moderada, que podrías explorar más a fondo.',
-      baja: 'Tu nivel de necesidad actual no parece urgente, pero siempre es bueno reflexionar al respecto.'
-    }[intensity]
-  };
-
-  return analysis;
-}
-
-
-  analyzeStressFrequency(analysis, questionData) {
-    let score = 0;
-    let category = 'low';
-    
-    const scoring = questionData.scoring || {};
-    
-    if (scoring.high_frequency) {
-      const matches = scoring.high_frequency.filter(freq => 
-        analysis.matches.some(match => match.keyword === freq));
-      if (matches.length > 0) {
-        score = 3;
-        category = 'high';
-      }
-    }
-    
-    if (scoring.medium_frequency && score === 0) {
-      const matches = scoring.medium_frequency.filter(freq => 
-        analysis.matches.some(match => match.keyword === freq));
-      if (matches.length > 0) {
-        score = 2;
-        category = 'medium';
-      }
-    }
-
-    this.weightedScores.frequency = score;
-    
-    return {
-      ...analysis,
-      score,
-      category,
-      frequency_pattern: this.detectFrequencyPattern(analysis.matches)
-    };
-  }
-
-  analyzeSymptoms(analysis, questionData) {
-    const symptomTypes = {
-      physical: 0,
-      cognitive: 0,
-      emotional: 0,
-      sleep: 0
-    };
-
-    const scoring = questionData.scoring || {};
-    
-    // Contar síntomas por categoría
-    if (scoring.physical_symptoms) {
-      symptomTypes.physical = scoring.physical_symptoms.filter(symptom => 
-        analysis.matches.some(match => match.keyword === symptom)).length;
-    }
-    
-    if (scoring.cognitive_symptoms) {
-      symptomTypes.cognitive = scoring.cognitive_symptoms.filter(symptom => 
-        analysis.matches.some(match => match.keyword === symptom)).length;
-    }
-    
-    if (scoring.sleep_symptoms) {
-      symptomTypes.sleep = scoring.sleep_symptoms.filter(symptom => 
-        analysis.matches.some(match => match.keyword === symptom)).length;
-    }
-
-    const totalSymptoms = Object.values(symptomTypes).reduce((a, b) => a + b, 0);
-    const symptomSeverity = totalSymptoms > 4 ? 'high' : totalSymptoms > 2 ? 'medium' : 'low';
-    
-    this.weightedScores.symptoms = totalSymptoms > 4 ? 3 : totalSymptoms > 2 ? 2 : 1;
-
-    return {
-      ...analysis,
       symptomTypes,
       totalSymptoms,
-      severity: symptomSeverity,
-      predominantType: Object.keys(symptomTypes).reduce((a, b) => 
-        symptomTypes[a] > symptomTypes[b] ? a : b)
+      foundKeywords,
+      severity
     };
   }
 
-  analyzeSleep(analysis, questionData) {
-    let sleepQuality = 'good';
-    let score = 0;
+  // Análisis para uso de producto - VERIFICADO QUE NO SUME
+  analyzeUsoProducto(userInput, questionData) {
+    const keywords = questionData.keywords || {};
     
+    for (const [optionValue, optionKeywords] of Object.entries(keywords)) {
+      if (Array.isArray(optionKeywords)) {
+        const foundKeywords = this.findKeywordsInText(userInput, optionKeywords);
+        if (foundKeywords.length > 0) {
+          console.log('🔍 UsoProducto - NO afecta scoring:', optionValue);
+          
+          // ✅ CONFIRMADO: NO actualiza ningún weightedScore
+          return {
+            category: optionValue,
+            score: 0, // Explícitamente 0
+            foundKeywords,
+            selectedOption: optionValue
+          };
+        }
+      }
+    }
+    
+    return { category: 'unknown', score: 0, foundKeywords: [] };
+  }
+
+  // Análisis para frecuencia de uso
+  analyzeFrecuenciaUso(userInput, questionData) {
+    return this.scoreByScoringCategories(userInput, questionData);
+  }
+
+  // Análisis para efectividad
+  analyzeEfectividad(userInput, questionData) {
+    return this.scoreByScoringCategories(userInput, questionData);
+  }
+
+  // Análisis para rutina de sueño - SIMPLIFICADO
+  analyzeRutinaSueno(userInput, questionData) {
+    // Primero buscar en keywords generales
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    console.log('Análisis de sueño - keywords encontradas:', foundKeywords);
+    
+    if (foundKeywords.length > 0) {
+      // Si encontramos keywords de problemas de sueño, es sueño malo
+      this.weightedScores.sleep_quality = 3;
+      
+      return {
+        category: 'poor_sleep',
+        score: 3,
+        foundKeywords
+      };
+    }
+    
+    // Si no se encontraron keywords específicas, buscar en scoring
+    const result = this.scoreByScoringCategories(userInput, questionData);
+    
+    let sleepScore = 0;
+    switch (result.category) {
+      case 'poor_sleep':
+        sleepScore = 3;
+        break;
+      case 'fair_sleep':
+        sleepScore = 2;
+        break;
+      case 'good_sleep':
+        sleepScore = 1;
+        break;
+      default:
+        sleepScore = 0;
+    }
+    
+    this.weightedScores.sleep_quality = sleepScore;
+    result.score = sleepScore;
+    
+    return result;
+  }
+
+  // Análisis para actividades de relajación - SIMPLIFICADO
+  analyzeActividadesRelajacion(userInput, questionData) {
+    // Primero buscar keywords de "no hacer nada"
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    console.log('Análisis de actividades - keywords encontradas:', foundKeywords);
+    
+    if (foundKeywords.length > 0) {
+      // Si encontramos keywords, probablemente es negativo (no hace actividades)
+      this.lifestyleFactors['relaxation'] = 2;
+      this.weightedScores.lifestyle = Object.values(this.lifestyleFactors).reduce((sum, val) => sum + val, 0);
+      
+      return {
+        category: 'no_activities',
+        score: 2,
+        foundKeywords,
+        factorName: 'relaxation',
+        lifestyleScore: 2
+      };
+    }
+    
+    // Si no se encontraron keywords, usar scoring
+    return this.scoreLifestyleFactor(userInput, questionData, 'relaxation');
+  }
+
+  // Análisis para alimentación - SIMPLIFICADO
+  analyzeAlimentacion(userInput, questionData) {
+    // Primero buscar keywords de mala alimentación
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    console.log('Análisis de alimentación - keywords encontradas:', foundKeywords);
+    
+    if (foundKeywords.length > 0) {
+      // Si encontramos keywords, probablemente es mala alimentación
+      this.lifestyleFactors['diet'] = 2;
+      this.weightedScores.lifestyle = Object.values(this.lifestyleFactors).reduce((sum, val) => sum + val, 0);
+      
+      return {
+        category: 'poor_diet',
+        score: 2,
+        foundKeywords,
+        factorName: 'diet',
+        lifestyleScore: 2
+      };
+    }
+    
+    // Si no se encontraron keywords, usar scoring
+    return this.scoreLifestyleFactor(userInput, questionData, 'diet');
+  }
+
+  // Análisis para intensidad de necesidad - MEJORADO
+  analyzeIntensidadNecesidad(userInput, questionData) {
+    const result = this.scoreByScoringCategories(userInput, questionData);
+    
+    console.log('🔍 IntensidadNecesidad - input:', userInput);
+    console.log('🔍 IntensidadNecesidad - result:', result);
+    
+    // Asignar score para need_intensity
+    let needScore = 0;
+    switch (result.category) {
+      case 'high_need':
+        needScore = 3;
+        break;
+      case 'medium_need':
+        needScore = 2;
+        break;
+      case 'low_need':
+        needScore = 1;
+        break;
+      default:
+        // Buscar en keywords generales
+        const allKeywords = questionData.keywords || [];
+        const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+        
+        console.log('🔍 IntensidadNecesidad - keywords encontradas:', foundKeywords);
+        
+        if (foundKeywords.length > 0) {
+          // Si encontramos keywords de "mucho apoyo", es alta necesidad
+          const highNeedKeywords = ['constante', 'siempre', 'mucho', 'necesito ayuda'];
+          const hasHighNeed = foundKeywords.some(kw => 
+            highNeedKeywords.some(hnk => 
+              this.normalizeText(kw).includes(this.normalizeText(hnk))
+            )
+          );
+          
+          if (hasHighNeed) {
+            needScore = 3;
+            result.category = 'high_need';
+          } else {
+            needScore = 2; // Asumir necesidad moderada
+            result.category = 'medium_need';
+          }
+          
+          result.foundKeywords = foundKeywords;
+        } else {
+          // Si la respuesta es ambigua como "si", asumir necesidad baja
+          console.log('⚠️ Respuesta ambigua para intensidad, asignando score bajo');
+          needScore = 1;
+          result.category = 'low_need';
+        }
+    }
+    
+    this.weightedScores.need_intensity = needScore;
+    result.score = needScore;
+    
+    console.log('🔍 IntensidadNecesidad - final score:', needScore);
+    
+    return result;
+  }
+
+  // Helper: verificar si hay keywords en una categoría
+  hasKeywordsInCategory(foundKeywords, categoryKeywords) {
+    if (!Array.isArray(categoryKeywords)) return false;
+    
+    return foundKeywords.some(keyword => 
+      categoryKeywords.some(catKeyword => 
+        this.normalizeText(keyword).includes(this.normalizeText(catKeyword)) ||
+        this.normalizeText(catKeyword).includes(this.normalizeText(keyword))
+      )
+    );
+  }
+
+  // Scoring usando las categorías de scoring del JSON
+  scoreByScoringCategories(userInput, questionData) {
     const scoring = questionData.scoring || {};
     
-    if (scoring.poor_sleep) {
-      const poorSleepMatches = scoring.poor_sleep.filter(issue => 
-        analysis.matches.some(match => match.keyword === issue));
-      if (poorSleepMatches.length > 0) {
-        sleepQuality = 'poor';
-        score = 3;
+    // Buscar en cada categoría de scoring
+    for (const [categoryName, keywords] of Object.entries(scoring)) {
+      if (Array.isArray(keywords)) {
+        const foundKeywords = this.findKeywordsInText(userInput, keywords);
+        if (foundKeywords.length > 0) {
+          let score = this.getScoreByCategory(categoryName);
+          
+          return {
+            category: categoryName,
+            score,
+            foundKeywords,
+            matchedCategory: categoryName
+          };
+        }
       }
     }
     
-    if (scoring.fair_sleep && score === 0) {
-      const fairSleepMatches = scoring.fair_sleep.filter(issue => 
-        analysis.matches.some(match => match.keyword === issue));
-      if (fairSleepMatches.length > 0) {
-        sleepQuality = 'fair';
-        score = 2;
+    // Si no se encontró en scoring, buscar en keywords generales
+    const allKeywords = questionData.keywords || [];
+    const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+    
+    if (foundKeywords.length > 0) {
+      return {
+        category: 'detected',
+        score: 1,
+        foundKeywords
+      };
+    }
+    
+    return { category: 'neutral', score: 0, foundKeywords: [] };
+  }
+
+  // Scoring para factores de lifestyle
+  scoreLifestyleFactor(userInput, questionData, factorName) {
+    const result = this.scoreByScoringCategories(userInput, questionData);
+    
+    // Si no se detectó en scoring, buscar en keywords generales
+    if (result.category === 'neutral') {
+      const allKeywords = questionData.keywords || [];
+      const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
+      
+      if (foundKeywords.length > 0) {
+        // Asumir que es negativo si se encontraron keywords (típicamente problemas)
+        result.category = factorName === 'relaxation' ? 'no_activities' : 'poor_diet';
+        result.foundKeywords = foundKeywords;
       }
     }
-
-    this.weightedScores.sleep_quality = score;
-
+    
+    // Convertir categoría a score numérico para lifestyle
+    let lifestyleScore = 0;
+    
+    switch (result.category) {
+      case 'no_activities':
+      case 'poor_diet':
+        lifestyleScore = 2;
+        break;
+      case 'some_activities':
+      case 'fair_diet':
+        lifestyleScore = 1;
+        break;
+      case 'regular_activities':
+      case 'good_diet':
+        lifestyleScore = 0;
+        break;
+      default:
+        if (result.foundKeywords && result.foundKeywords.length > 0) {
+          lifestyleScore = 1; // Score moderado si se detectaron keywords
+        }
+    }
+    
+    this.lifestyleFactors[factorName] = lifestyleScore;
+    this.weightedScores.lifestyle = Object.values(this.lifestyleFactors).reduce((sum, val) => sum + val, 0);
+    
     return {
-      ...analysis,
-      sleepQuality,
-      score,
-      sleepIssues: this.identifySleepIssues(analysis.matches),
-      impactLevel: score > 2 ? 'high' : score > 1 ? 'medium' : 'low'
+      ...result,
+      lifestyleScore,
+      factorName
     };
   }
 
-  analyzeRelaxationActivities(analysis, questionData) {
-    let activityLevel = 'none';
-    let score = 0;
-    
-    const scoring = questionData.scoring || {};
-    
-    if (scoring.regular_activities) {
-      const regularMatches = scoring.regular_activities.filter(activity => 
-        analysis.matches.some(match => match.keyword === activity));
-      if (regularMatches.length > 0) {
-        activityLevel = 'regular';
-        score = -1; // Positive factor
-      }
-    }
-    
-    if (scoring.no_activities) {
-      const noActivityMatches = scoring.no_activities.filter(reason => 
-        analysis.matches.some(match => match.keyword === reason));
-      if (noActivityMatches.length > 0) {
-        activityLevel = 'none';
-        score = 1;
-      }
-    }
-
-    this.weightedScores.lifestyle += score;
-
-    return {
-      ...analysis,
-      activityLevel,
-      score,
-      barriers: this.identifyBarriers(analysis.matches),
-      suggestions: this.generateActivitySuggestions(activityLevel)
+  // Obtener score de frecuencia
+  getFrequencyScore(optionValue) {
+    const scores = {
+      'siempre': 3,
+      'a_menudo': 2,
+      'a_veces': 1,
+      'nunca': 0
     };
+    return scores[optionValue] || 0;
   }
 
-  generateFinalMessageFromRecommendation(recommendation, questionData) {
-  const { message, closing_message } = questionData;
+  // Obtener score según categoría
+  getScoreByCategory(categoryName) {
+    const categoryScores = {
+      'high_stress': 3,
+      'medium_stress': 2,
+      'low_stress': 1,
+      'high_frequency': 3,
+      'medium_frequency': 2,
+      'low_frequency': 1,
+      'poor_sleep': 3,
+      'fair_sleep': 2,
+      'good_sleep': 1,
+      'high_need': 3,
+      'medium_need': 2,
+      'low_need': 1,
+      'effective': 1,
+      'somewhat_effective': 0,
+      'not_effective': -1,
+      'regular_user': 1,
+      'occasional_user': 0,
+      'no_activities': 2,
+      'some_activities': 1,
+      'regular_activities': 0,
+      'poor_diet': 2,
+      'fair_diet': 1,
+      'good_diet': 0
+    };
+    
+    return categoryScores[categoryName] || 0;
+  }
 
-  const fullMessage = `
-${message}
+  // Obtener mensaje de respuesta del JSON - SIMPLIFICADO Y CORREGIDO
+  getResponseMessage(result, questionData) {
+    const respuesta = questionData.respuesta_si_detecta;
+    
+    console.log('Obteniendo mensaje de respuesta:', {
+      questionId: questionData.id,
+      category: result.category,
+      selectedOption: result.selectedOption,
+      foundKeywords: result.foundKeywords,
+      respuesta: respuesta
+    });
+    
+    // Caso 1: Si hay respuestas específicas por categoría/opción (objeto)
+    if (respuesta && typeof respuesta === 'object') {
+      const messageKey = result.category || result.selectedOption;
+      if (messageKey && respuesta[messageKey]) {
+        console.log('✅ Usando respuesta específica para:', messageKey);
+        return respuesta[messageKey];
+      }
+    }
+    
+    // Caso 2: Si hay respuesta general (string) y se detectó ALGO
+    if (typeof respuesta === 'string') {
+      // Si se encontraron keywords O se detectó una categoría válida
+      if ((result.foundKeywords && result.foundKeywords.length > 0) || 
+          (result.category && result.category !== 'neutral' && result.category !== 'unknown')) {
+        console.log('✅ Usando respuesta general del JSON');
+        return respuesta;
+      }
+    }
+    
+    // Caso 3: Fallback - Si se detectó algo pero no hay respuesta específica
+    if ((result.foundKeywords && result.foundKeywords.length > 0) || 
+        (result.category && result.category !== 'neutral' && result.category !== 'unknown')) {
+      console.log('⚠️ Detectado pero sin respuesta específica, usando genérico');
+      return "Gracias por compartir esa información conmigo.";
+    }
+    
+    // Caso 4: No se detectó nada
+    console.log('❌ No se detectó nada específico');
+    return "Entiendo. Continuemos con las siguientes preguntas.";
+  }
 
-🔹 **Dosis recomendada:** ${recommendation.dosage}
-🕒 **Horario sugerido:** ${recommendation.timing}
-⏳ **Duración sugerida:** ${recommendation.duration}
-💡 **Consejos adicionales:** ${recommendation.additionalTips.join('\n- ')}
+  // Obtener siguiente pregunta
+  getNextQuestion(result, questionData) {
+    const next = questionData.next;
+    
+    // Si next es un objeto (depende de la respuesta)
+    if (next && typeof next === 'object') {
+      const nextKey = result.category || result.selectedOption;
+      return next[nextKey] || Object.values(next)[0]; // Tomar primera opción como fallback
+    }
+    
+    // Si next es un string
+    if (typeof next === 'string') {
+      return next;
+    }
+    
+    return null;
+  }
 
-🍎 **Sugerencias de estilo de vida:**
-• Nutrición: ${recommendation.lifestyle.nutrition.join('; ')}
-• Ejercicio: ${recommendation.lifestyle.exercise.join('; ')}
-• Sueño: ${recommendation.lifestyle.sleep.join('; ')}
-• Manejo del estrés: ${recommendation.lifestyle.stress_management.join('; ')}
-
-📋 **Plan de seguimiento:**
-- Frecuencia: ${recommendation.followUp.frequency}
-- Duración: ${recommendation.followUp.duration}
-- Checkpoints: ${recommendation.followUp.checkpoints.join(', ')}
-
-${closing_message}
-  `.trim();
-
-  return fullMessage;
-}
-
-
-  // Generar recomendación final mejorada
+  // Generar recomendación - CON DEBUG
   generateRecommendation() {
-    const totalScore = Object.values(this.weightedScores).reduce((a, b) => a + b, 0);
-    const maxPossibleScore = 18; // 6 categories × 3 max points each
-    const normalizedScore = (totalScore / maxPossibleScore) * 100;
-    
-    let recommendation = {
-      score: totalScore,
-      normalizedScore: Math.round(normalizedScore),
-      riskLevel: this.calculateRiskLevel(normalizedScore),
-      dosage: this.calculateDosage(totalScore),
-      timing: this.calculateTiming(totalScore),
-      duration: this.calculateDuration(totalScore),
-      additionalTips: this.generatePersonalizedTips(),
-      lifestyle: this.generateLifestyleSuggestions(),
-      followUp: this.generateFollowUpPlan()
-    };
-
-    return recommendation;
+    console.log('🎯 GENERANDO RECOMENDACIÓN FINAL');
+    this.getScores(); // Esto mostrará el breakdown completo
+    return recommendationEngine.generateRecommendation(this.weightedScores);
   }
 
-  calculateRiskLevel(normalizedScore) {
-    if (normalizedScore >= 70) return 'high';
-    if (normalizedScore >= 40) return 'medium';
-    return 'low';
-  }
-
-  calculateDosage(totalScore) {
-    if (totalScore >= 13) {
-      return "3-4 gotas sublingüales, 2-3 veces al día";
-    } else if (totalScore >= 7) {
-      return "2-3 gotas sublingüales, 2 veces al día";
-    } else {
-      return "1-2 gotas sublingüales cuando sea necesario";
-    }
-  }
-
-  calculateTiming(totalScore) {
-    if (totalScore >= 13) {
-      return "Mañana (al despertar), tarde (después del almuerzo) y noche (30 min antes de dormir)";
-    } else if (totalScore >= 7) {
-      return "Mañana (para prepararte para el día) y tarde/noche (cuando sientas estrés)";
-    } else {
-      return "Cuando sientas estrés o antes de situaciones desafiantes";
-    }
-  }
-
-  calculateDuration(totalScore) {
-    if (totalScore >= 13) {
-      return "Uso constante por 4-6 semanas, luego evaluar";
-    } else if (totalScore >= 7) {
-      return "Uso regular por 2-4 semanas";
-    } else {
-      return "Uso según necesidad, máximo 2 semanas continuas";
-    }
-  }
-
-  generatePersonalizedTips() {
-    let tips = [];
-    
-    if (this.weightedScores.sleep_quality >= 2) {
-      tips.push("Crea una rutina de sueño: misma hora para dormir y despertar");
-      tips.push("Evita pantallas 1 hora antes de dormir");
-    }
-    
-    if (this.weightedScores.stress_level >= 2) {
-      tips.push("Practica respiración profunda: 4 segundos inhalar, 4 mantener, 4 exhalar");
-      tips.push("Dedica 10 minutos diarios a una actividad que disfrutes");
-    }
-    
-    if (this.weightedScores.lifestyle >= 1) {
-      tips.push("Comienza con caminatas de 10 minutos diarios");
-      tips.push("Programa 5 minutos de meditación o relajación");
-    }
-
-    return tips;
-  }
-
-  generateLifestyleSuggestions() {
-    return {
-      nutrition: this.getNutritionSuggestions(),
-      exercise: this.getExerciseSuggestions(),
-      sleep: this.getSleepSuggestions(),
-      stress_management: this.getStressManagementSuggestions()
+  // Debug
+  getScores() {
+    return { 
+      ...this.weightedScores,
+      lifestyle_factors: { ...this.lifestyleFactors }
     };
   }
 
-  generateFollowUpPlan() {
-    const riskLevel = this.calculateRiskLevel(this.weightedScores.total);
-    
-    if (riskLevel === 'high') {
-      return {
-        frequency: "Seguimiento semanal",
-        duration: "4-6 semanas",
-        checkpoints: ["Calidad del sueño", "Nivel de estrés diario", "Efectividad del producto"]
-      };
-    } else if (riskLevel === 'medium') {
-      return {
-        frequency: "Seguimiento quincenal",
-        duration: "2-4 semanas",
-        checkpoints: ["Mejoras en síntomas", "Adaptación a la rutina"]
-      };
-    } else {
-      return {
-        frequency: "Seguimiento mensual",
-        duration: "1-2 meses",
-        checkpoints: ["Situaciones de estrés manejadas", "Satisfacción general"]
-      };
-    }
-  }
-
-  // Métodos auxiliares para generar sugerencias específicas
-  getNutritionSuggestions() {
-    return [
-      "Reduce el consumo de cafeína después de las 2 PM",
-      "Incluye alimentos ricos en magnesio (nueces, semillas, vegetales verdes)",
-      "Mantén horarios regulares de comidas"
-    ];
-  }
-
-  getExerciseSuggestions() {
-    return [
-      "Caminata de 20-30 minutos diarios",
-      "Ejercicios de estiramiento por las mañanas",
-      "Yoga suave o tai chi para relajación"
-    ];
-  }
-
-  getSleepSuggestions() {
-    return [
-      "Mantén la habitación fresca y oscura",
-      "Usa técnicas de relajación antes de dormir",
-      "Evita comidas pesadas 3 horas antes de acostarte"
-    ];
-  }
-
-  getStressManagementSuggestions() {
-    return [
-      "Técnicas de respiración consciente",
-      "Journaling: escribe 3 cosas positivas del día",
-      "Establece límites claros entre trabajo y descanso"
-    ];
-  }
-
-  // Métodos auxiliares para análisis específicos
-  detectFrequencyPattern(matches) {
-    // Implementar lógica para detectar patrones de frecuencia
-    return "pattern_detected";
-  }
-
-  identifySleepIssues(matches) {
-    // Implementar lógica para identificar problemas específicos de sueño
-    return ["insomnio", "sueño_interrumpido"];
-  }
-
-  identifyBarriers(matches) {
-    // Implementar lógica para identificar barreras para actividades
-    return ["falta_tiempo", "falta_motivacion"];
-  }
-
-  generateActivitySuggestions(activityLevel) {
-    const suggestions = {
-      none: ["Respiración profunda (2 min)", "Caminar al aire libre", "Escuchar música relajante"],
-      some: ["Yoga básico", "Meditación guiada", "Ejercicio ligero"],
-      regular: ["Mantener rutina actual", "Agregar variedad", "Aumentar intensidad gradualmente"]
+  // Reset
+  resetScores() {
+    this.weightedScores = {
+      stress_level: 0,
+      frequency: 0,
+      symptoms: 0,
+      sleep_quality: 0,
+      lifestyle: 0,
+      need_intensity: 0
     };
-    return suggestions[activityLevel] || suggestions.none;
-  }
-
-  getStressInterpretation(category) {
-    const interpretations = {
-      high_stress: "Experimentas un nivel alto de estrés que puede estar afectando significativamente tu calidad de vida",
-      medium_stress: "Tienes un nivel moderado de estrés que es manejable pero requiere atención",
-      low_stress: "Tu nivel de estrés es relativamente bajo, mantienes un buen equilibrio",
-      neutral: "Tu estado emocional parece estable en este momento"
-    };
-    return interpretations[category] || interpretations.neutral;
-  }
-
-  getStressRecommendations(category) {
-    const recommendations = {
-      high_stress: ["Considera apoyo profesional", "Usa Serenlive regularmente", "Implementa técnicas de manejo del estrés"],
-      medium_stress: ["Establece rutinas de relajación", "Usa Serenlive según necesidad", "Mantén hábitos saludables"],
-      low_stress: ["Continúa con tus estrategias actuales", "Usa Serenlive ocasionalmente", "Mantén el equilibrio"]
-    };
-    return recommendations[category] || recommendations.low_stress;
+    this.lifestyleFactors = {};
   }
 }
 
