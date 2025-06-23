@@ -1,7 +1,5 @@
-/* ——— 1. Importar fuentes ——— */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap");
 
-/* ——— 2. Variables CSS ——— */
 :root {
   --primary-color: #3c4c3c;
   --secondary-color: #5c6c5c;
@@ -17,7 +15,6 @@
   --body-font: "Open Sans", sans-serif;
 }
 
-/* ——— 3. Reset y base ——— */
 * {
   margin: 0;
   padding: 0;
@@ -25,7 +22,7 @@
 }
 
 html {
-  scroll-behavior: auto; /* CAMBIO: Inicia en auto, JS lo cambia después */
+  scroll-behavior: auto;
 }
 
 ::selection {
@@ -41,7 +38,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ——— 4. Encabezados y párrafos ——— */
 h1,
 h2,
 h3,
@@ -77,7 +73,7 @@ header {
   z-index: 1000;
   background: transparent;
   padding: 20px 40px;
-  transition: none; /* Importante: Sin transición inicial */
+  transition: none;
 }
 
 header nav {
@@ -95,7 +91,7 @@ header nav {
   -webkit-backdrop-filter: none;
   position: relative;
   overflow: visible;
-  transition: none; /* Importante: Sin transición inicial */
+  transition: none;
 }
 
 header nav::before {
@@ -121,7 +117,6 @@ header nav:hover::before {
   opacity: 1;
 }
 
-/* CAMBIO: Hacer el selector más específico para desktop */
 header nav > ul {
   list-style-type: none;
   display: flex;
@@ -129,10 +124,9 @@ header nav > ul {
   gap: 32px;
   margin: 0;
   padding: 0;
-  transition: none; /* Importante: Sin transición inicial */
+  transition: none;
 }
 
-/* CAMBIO: También hacer estos selectores más específicos */
 header nav > ul li {
   position: relative;
 }
@@ -181,7 +175,6 @@ header nav > ul li a.active::after {
   transform: translateX(-50%) scaleX(1);
 }
 
-/* Botón hamburguesa */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -211,7 +204,6 @@ header nav > ul li a.active::after {
   transform-origin: center;
 }
 
-/* Animación hamburguesa activa */
 .hamburger.active span:nth-child(1) {
   transform: translateY(8.5px) rotate(45deg);
   background: #3c4c3c;
@@ -227,7 +219,6 @@ header nav > ul li a.active::after {
   background: #3c4c3c;
 }
 
-/* ESTILOS RESPONSIVE DEL MENÚ */
 @media (max-width: 768px) {
   header {
     background: transparent;
@@ -251,7 +242,6 @@ header nav > ul li a.active::after {
     justify-content: flex-end;
   }
 
-  /* CAMBIO: Ocultar el menú desktop en mobile */
   header nav > ul {
     display: none;
   }
@@ -298,268 +288,6 @@ header nav > ul li a.active::after {
     max-width: 400px;
   }
 
-  /* CAMBIO: Selector más específico para el menú mobile */
-  .nav-links nav ul {
-    display: flex !important; /* Importante para override */
-    flex-direction: column !important; /* Forzar columna */
-    gap: 20px !important; /* Override del gap de desktop */
-    align-items: stretch;
-    padding: 0 20px;
-    margin: 0;
-    width: 100%;
-    list-style: none;
-  }
-
-  .nav-links nav ul li {
-    width: 100%;
-    margin: 0;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.3s ease;
-  }
-
-  .nav-links.show nav ul li {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .nav-links.show nav ul li:nth-child(1) {
-    transition-delay: 0.1s;
-  }
-  .nav-links.show nav ul li:nth-child(2) {
-    transition-delay: 0.2s;
-  }
-  .nav-links.show nav ul li:nth-child(3) {
-    transition-delay: 0.3s;
-  }
-  .nav-links.show nav ul li:nth-child(4) {
-    transition-delay: 0.4s;
-  }
-
-  .nav-links nav ul li a {
-    display: block;
-    color: #2c3e50;
-    text-decoration: none;
-    font-size: 2rem;
-    font-weight: 400;
-    padding: 20px 40px;
-    margin: 0;
-    border-radius: 20px;
-    width: 100%;
-    box-sizing: border-box;
-
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    border: 1px solid rgba(255, 255, 255, 0.4);
-
-    transition: all 0.3s ease;
-
-    position: relative;
-    overflow: hidden;
-
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
-
-    text-align: center;
-  }
-
-  .nav-links nav ul li a:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.45);
-    color: #2c3e50;
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-
-  /* Quitar efectos del menú desktop en mobile */
-  .nav-links nav ul li a::before,
-  .nav-links nav ul li a::after {
-    display: none;
-  }
-
-  .nav-links nav ul li a.active {
-    background: rgba(39, 174, 96, 0.2);
-    color: #27ae60;
-    border-color: rgba(39, 174, 96, 0.4);
-    font-weight: 400;
-  }
-
-  .nav-links::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.3;
-    background-image: radial-gradient(
-        circle at 25% 25%,
-        rgba(255, 255, 255, 0.1) 1px,
-        transparent 1px
-      ),
-      radial-gradient(
-        circle at 75% 75%,
-        rgba(255, 255, 255, 0.1) 1px,
-        transparent 1px
-      );
-    background-size: 50px 50px;
-    animation: float 20s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-    33% {
-      transform: translateY(-10px) rotate(1deg);
-    }
-    66% {
-      transform: translateY(5px) rotate(-1deg);
-    }
-  }
-
-  body.menu-open {
-    overflow: hidden;
-  }
-}
-
-/* Botón hamburguesa */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 28px;
-  height: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  z-index: 2000;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.hamburger:hover {
-  transform: scale(1.1);
-}
-
-.hamburger span {
-  display: block;
-  height: 3px;
-  width: 100%;
-  background: #5c6c5c;
-  border-radius: 3px;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  transform-origin: center;
-}
-
-/* Animación hamburguesa activa */
-.hamburger.active span:nth-child(1) {
-  transform: translateY(8.5px) rotate(45deg);
-  background: #5c6c5c;
-}
-
-.hamburger.active span:nth-child(2) {
-  opacity: 0;
-  transform: scaleX(0);
-}
-
-.hamburger.active span:nth-child(3) {
-  transform: translateY(-8.5px) rotate(-45deg);
-  background: #5c6c5c;
-}
-
-/* BRAND NAME - Para móvil */
-.brand-name {
-  position: absolute;
-  left: 75px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-10px);
-  font-family: "Montserrat", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: rgba(129, 129, 129, 0.83);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  line-height: 1.2;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.transitions-enabled .brand-name {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* ESTILOS RESPONSIVE DEL MENÚ */
-@media (max-width: 768px) {
-  header {
-    background: transparent;
-    padding: 15px 20px; /* CAMBIO: Ajustar padding inicial para móvil */
-  }
-
-  /* CAMBIO: Remover estilos de .scrolled que conflictuaban con JS */
-
-  header nav {
-    justify-content: flex-end;
-    max-width: 100%; /* CAMBIO: Asegurar que inicie en 100% en móvil */
-  }
-
-  /* Ocultar el menú desktop en mobile */
-  header nav > ul {
-    display: none;
-  }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-links {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
-    -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.05);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-    z-index: 1500;
-
-    box-shadow: inset 0 0 100px rgba(255, 255, 255, 0.15),
-      0 0 50px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .nav-links.show {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1);
-  }
-
-  .nav-links nav {
-    width: 100%;
-    max-width: 400px;
-  }
-
-  /* Selector específico para el menú mobile */
   .nav-links nav ul {
     display: flex !important;
     flex-direction: column !important;
@@ -635,7 +363,6 @@ header nav > ul li a.active::after {
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
 
-  /* Quitar efectos del menú desktop en mobile */
   .nav-links nav ul li a::before,
   .nav-links nav ul li a::after {
     display: none;
@@ -689,7 +416,258 @@ header nav > ul li a.active::after {
   }
 }
 
-/* ——— 6. Estilos de secciones ——— */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2000;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+  transform: scale(1.1);
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #5c6c5c;
+  border-radius: 3px;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+  background: #5c6c5c;
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+  background: #5c6c5c;
+}
+
+.brand-name {
+  position: absolute;
+  left: 75px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(129, 129, 129, 0.83);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.transitions-enabled .brand-name {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  header {
+    background: transparent;
+    padding: 15px 20px;
+  }
+
+  header nav {
+    justify-content: flex-end;
+    max-width: 100%;
+  }
+
+  header nav > ul {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
+    -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.05);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    z-index: 1500;
+
+    box-shadow: inset 0 0 100px rgba(255, 255, 255, 0.15),
+      0 0 50px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .nav-links.show {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  .nav-links nav {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .nav-links nav ul {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    align-items: stretch;
+    padding: 0 20px;
+    margin: 0;
+    width: 100%;
+    list-style: none;
+  }
+
+  .nav-links nav ul li {
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.show nav ul li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-links.show nav ul li:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  .nav-links.show nav ul li:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  .nav-links.show nav ul li:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  .nav-links.show nav ul li:nth-child(4) {
+    transition-delay: 0.4s;
+  }
+
+  .nav-links nav ul li a {
+    display: block;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 400;
+    padding: 20px 40px;
+    margin: 0;
+    border-radius: 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    transition: all 0.3s ease;
+
+    position: relative;
+    overflow: hidden;
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+    text-align: center;
+  }
+
+  .nav-links nav ul li a:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.45);
+    color: #2c3e50;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .nav-links nav ul li a::before,
+  .nav-links nav ul li a::after {
+    display: none;
+  }
+
+  .nav-links nav ul li a.active {
+    background: rgba(39, 174, 96, 0.2);
+    color: #27ae60;
+    border-color: rgba(39, 174, 96, 0.4);
+    font-weight: 400;
+  }
+
+  .nav-links::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.3;
+    background-image: radial-gradient(
+        circle at 25% 25%,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px
+      );
+    background-size: 50px 50px;
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+      transform: translateY(5px) rotate(-1deg);
+    }
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+}
+
 .contenedor {
   max-width: 1200px;
   margin: 0 auto;
@@ -769,7 +747,6 @@ header nav > ul li a.active::after {
   margin-bottom: 1rem;
 }
 
-/* ——— 7. Footer ——— */
 .footer {
   background-color: var(--primary-color);
   color: white;
@@ -825,7 +802,6 @@ header nav > ul li a.active::after {
   width: 100%;
 }
 
-/* ——— 8. Animaciones ——— */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -837,7 +813,6 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Desktop mediano */
 @media (max-width: 1200px) {
   .contenedor {
     max-width: 1000px;
@@ -867,7 +842,6 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Tablet landscape */
 @media (max-width: 992px) {
   .contenedor {
     padding: 0 30px;
@@ -922,7 +896,6 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Tablet portrait */
 @media (max-width: 768px) {
   .contenedor {
     padding: 0 25px;
@@ -999,7 +972,6 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Mobile landscape */
 @media (max-width: 576px) {
   .contenedor {
     padding: 0 20px;
@@ -1072,7 +1044,6 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Mobile portrait muy pequeño */
 @media (max-width: 400px) {
   .contenedor {
     padding: 0 15px;
@@ -1132,28 +1103,24 @@ header nav > ul li a.active::after {
   }
 }
 
-/* Ajustes específicos para mejorar la experiencia */
 @media (max-width: 768px) {
-  /* Asegurar que las imágenes no se deformen */
   .sobre-nosotros__imagen img,
   .sobre-plantas__imagen img {
     object-fit: cover;
     min-height: 200px;
   }
 
-  /* Mejorar el espaciado en listas */
   .sobre-nosotros__texto ul li strong {
     display: block;
     margin-bottom: 3px;
   }
 }
 
-/* Ajuste para pantallas muy anchas */
 @media (min-width: 1400px) {
   .contenedor {
     max-width: 1200px;
   }
-  
+
   .sobre-nosotros,
   .sobre-plantas {
     gap: 60px;

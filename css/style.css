@@ -506,17 +506,11 @@ header nav > ul li a.active::after {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.cta-button-inf:hover {
-  transform: translateX(-50%) translateY(-5px);
-  color: #27ae60;
-}
-
 .cta-button-inf i {
   font-size: 1rem;
   margin-left: 0.5rem;
 }
 
-/* Animación bounce si no existe */
 @keyframes bounce {
   0%,
   20%,

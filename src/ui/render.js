@@ -24,37 +24,31 @@ export function addMessage(type, text, avatar) {
   container.scrollTop = container.scrollHeight;
 }
 
-// FUNCIÓN CORREGIDA - compatible con ambos usos
 export function renderBotMessage(text, sender, callback) {
-  console.log("🎨 renderBotMessage called with:", { text, sender, callback: typeof callback });
-  
-  // Detectar si se está usando la firma antigua (text, callback)
-  if (typeof sender === 'function' && callback === undefined) {
-    // Uso antiguo: renderBotMessage(text, callback)
+  console.log("🎨 renderBotMessage called with:", {
+    text,
+    sender,
+    callback: typeof callback,
+  });
+
+  if (typeof sender === "function" && callback === undefined) {
     callback = sender;
     sender = "bot";
-    console.log("🔄 Detectado uso antiguo, ajustando parámetros");
   }
-  
-  // Valor por defecto para sender
-  if (!sender || typeof sender !== 'string') {
+
+  if (!sender || typeof sender !== "string") {
     sender = "bot";
   }
-  
-  // Determinar el avatar basado en el sender
+
   const avatar = sender === "bot" ? "🤖" : "👤";
-  
+
   addMessage(sender, text, avatar);
 
-  // Ejecutar callback si existe
-  if (typeof callback === 'function') {
-    console.log("✅ Ejecutando callback de renderBotMessage");
-    // Pequeño delay para asegurar que el mensaje se renderice
+  if (typeof callback === "function") {
     setTimeout(() => {
       callback();
     }, 100);
   } else {
-    console.log("ℹ️ No hay callback para ejecutar");
   }
 }
 
@@ -62,13 +56,13 @@ export function renderButtonOptions(options, callback) {
   const container = document.createElement("div");
   container.className = "option-buttons";
 
-  options.forEach(opt => {
+  options.forEach((opt) => {
     const btn = document.createElement("button");
     btn.className = "chat-option-button";
     btn.innerText = opt.text;
 
     btn.onclick = () => {
-      btn.classList.add('exit');
+      btn.classList.add("exit");
       setTimeout(() => {
         container.remove();
         callback(opt.id);
@@ -78,11 +72,12 @@ export function renderButtonOptions(options, callback) {
     container.appendChild(btn);
   });
 
-  const chatContainer = document.getElementById("chatMessages") ||
+  const chatContainer =
+    document.getElementById("chatMessages") ||
     document.getElementById("chat") ||
-    document.querySelector('.chat-container') ||
-    document.querySelector('.messages-container') ||
-    document.querySelector('.chat-messages');
+    document.querySelector(".chat-container") ||
+    document.querySelector(".messages-container") ||
+    document.querySelector(".chat-messages");
 
   if (chatContainer) {
     chatContainer.appendChild(container);
@@ -96,35 +91,29 @@ export function renderButtonOptions(options, callback) {
   }
 }
 
-// 🔥 FUNCIÓN MEJORADA - Usa tu animación CSS
 export function showTyping() {
-  console.log('💭 Mostrando indicador de typing');
-  
-  const chatContainer = document.getElementById("chatMessages") ||
-    document.getElementById("chat");
-  
+  const chatContainer =
+    document.getElementById("chatMessages") || document.getElementById("chat");
+
   if (!chatContainer) {
     console.error("❌ No se encontró el contenedor de mensajes para typing");
     return;
   }
 
-  // Remover typing anterior si existe
   hideTyping();
 
-  // Crear elemento de typing con tu estructura
-  const typingMessage = document.createElement('div');
-  typingMessage.className = 'message bot';
-  typingMessage.id = 'typing-indicator';
+  const typingMessage = document.createElement("div");
+  typingMessage.className = "message bot";
+  typingMessage.id = "typing-indicator";
   typingMessage.style.animationDelay = "0s";
-  
+
   const avatarDiv = document.createElement("div");
   avatarDiv.className = "message-avatar bot-msg-avatar";
   avatarDiv.textContent = "🤖";
 
   const contentDiv = document.createElement("div");
   contentDiv.className = "message-content";
-  
-  // 🎨 Usar tu animación CSS de typing
+
   contentDiv.innerHTML = `
     <div class="typing-indicator">
       <div class="typing-dot"></div>
@@ -135,20 +124,17 @@ export function showTyping() {
 
   typingMessage.appendChild(avatarDiv);
   typingMessage.appendChild(contentDiv);
-  
+
   chatContainer.appendChild(typingMessage);
-  
-  // Scroll automático
+
   setTimeout(() => {
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }, 50);
 }
 
-// 🔥 FUNCIÓN MEJORADA - Más robusta
 export function hideTyping() {
   const typingIndicator = document.getElementById("typing-indicator");
   if (typingIndicator) {
-    console.log('🚫 Ocultando indicador de typing');
     typingIndicator.remove();
   }
 }

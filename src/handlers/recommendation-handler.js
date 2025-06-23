@@ -11,28 +11,24 @@ export function handleRecommendationGeneration() {
   setTimeout(() => {
     hideTyping();
 
-    // Mensaje de análisis personalizado
     renderBotMessage(generateAnalysisMessage(recommendation));
 
     setTimeout(() => {
-      // Mensaje de dosificación
       renderBotMessage(generateDosageMessage(recommendation));
 
       setTimeout(() => {
-        // Mensaje de tips personalizados
         renderBotMessage(generateTipsMessage(recommendation));
 
         setTimeout(() => {
-          // Mensaje de estilo de vida (nuevo)
           renderBotMessage(generateLifestyleMessage(recommendation));
 
           setTimeout(() => {
-            // Mensaje de seguimiento (nuevo)
             renderBotMessage(generateFollowUpMessage(recommendation));
 
             setTimeout(() => {
-              // Mensaje de cierre
-              const closing = questions.find(q => q.type === "recommendation")?.closing_message ||
+              const closing =
+                questions.find((q) => q.type === "recommendation")
+                  ?.closing_message ||
                 "¡Gracias por confiar en Serenlive! Estoy aquí para acompañarte en tu bienestar. 💚🌿";
               renderBotMessage(closing);
               disableInput();
@@ -44,7 +40,6 @@ export function handleRecommendationGeneration() {
   }, 1000);
 }
 
-// Mensaje de análisis con más detalles
 function generateAnalysisMessage(reco) {
   return `
     <div>
@@ -55,23 +50,15 @@ function generateAnalysisMessage(reco) {
     </div>`;
 }
 
-// Mensaje de dosificación mejorado
 function generateDosageMessage(reco) {
   return `
     <div>
-      <strong>💊 Tu Recomendación Personalizada de Serenlive</strong><br/>
-      🥄 <b>Dosificación:</b> ${reco.dosage}<br/>
-      ⏰ <b>Horarios óptimos:</b> ${reco.timing}<br/>
-      📅 <b>Duración sugerida:</b> ${reco.duration}<br/>
-      <div>
-        💡 <b>Tip:</b> Para mejores resultados, mantén las gotas bajo la lengua por 30-60 segundos antes de tragar.
-      </div>
+      <strong>💊 Estamos trabajando para traerte una dosis personalizada</strong><br/>
     </div>`;
 }
 
-// Mensaje de tips personalizados ampliado
 function generateTipsMessage(reco) {
-  const tips = reco.additionalTips.slice(0, 4); // Mostrar hasta 4 tips
+  const tips = reco.additionalTips.slice(0, 4);
   return `
     <div>
       <strong>💡 Tips Personalizados para Ti</strong><br/>
@@ -82,7 +69,6 @@ function generateTipsMessage(reco) {
     </div>`;
 }
 
-// Nueva función: Mensaje de estilo de vida
 function generateLifestyleMessage(reco) {
   const lifestyle = reco.lifestyle;
   return `
@@ -90,13 +76,22 @@ function generateLifestyleMessage(reco) {
       <strong>🌿 Plan de Bienestar Integral</strong><br/>
       
       <b>🍎 Nutrición:</b><br/>
-      ${lifestyle.nutrition.slice(0, 2).map(tip => `• ${tip}`).join("<br/>")}<br/>
+      ${lifestyle.nutrition
+        .slice(0, 2)
+        .map((tip) => `• ${tip}`)
+        .join("<br/>")}<br/>
       
       <b>🏃‍♀️ Actividad física:</b><br/>
-      ${lifestyle.exercise.slice(0, 2).map(tip => `• ${tip}`).join("<br/>")}<br/>
+      ${lifestyle.exercise
+        .slice(0, 2)
+        .map((tip) => `• ${tip}`)
+        .join("<br/>")}<br/>
       
       <b>😴 Descanso:</b><br/>
-      ${lifestyle.sleep.slice(0, 2).map(tip => `• ${tip}`).join("<br/>")}<br/>
+      ${lifestyle.sleep
+        .slice(0, 2)
+        .map((tip) => `• ${tip}`)
+        .join("<br/>")}<br/>
       
       <div>
         ℹ️ Estos hábitos potenciarán los efectos de Serenlive y mejorarán tu bienestar general.
@@ -104,7 +99,6 @@ function generateLifestyleMessage(reco) {
     </div>`;
 }
 
-// Nueva función: Mensaje de seguimiento
 function generateFollowUpMessage(reco) {
   const followUp = reco.followUp;
   return `
@@ -115,7 +109,9 @@ function generateFollowUpMessage(reco) {
       📅 <b>Duración del plan:</b> ${followUp.duration}<br/>
       
       <b>🎯 Puntos de control:</b><br/>
-      ${followUp.checkpoints.map(checkpoint => `• ${checkpoint}`).join("<br/>")}<br/>
+      ${followUp.checkpoints
+        .map((checkpoint) => `• ${checkpoint}`)
+        .join("<br/>")}<br/>
       
       <div>
         📞 <b>Soporte continuo:</b> Estaremos aquí para acompañarte en cada paso de tu proceso de bienestar.
@@ -123,10 +119,9 @@ function generateFollowUpMessage(reco) {
     </div>`;
 }
 
-// Función alternativa para generar recomendación completa de una vez (opcional)
 export function generateCompleteRecommendation() {
   const recommendation = analyzer.generateRecommendation();
-  
+
   return `
     <div>
       ${generateAnalysisMessage(recommendation)}
@@ -142,13 +137,12 @@ export function generateCompleteRecommendation() {
   `;
 }
 
-// Función para obtener solo la recomendación de dosificación rápida
 export function getQuickDosageRecommendation() {
   const recommendation = analyzer.generateRecommendation();
   return {
     dosage: recommendation.dosage,
     timing: recommendation.timing,
     riskLevel: recommendation.riskLevel,
-    riskLabel: recommendation.riskLabel
+    riskLabel: recommendation.riskLabel,
   };
 }

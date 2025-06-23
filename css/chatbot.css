@@ -1,18 +1,17 @@
 .container {
-  position: fixed !important; /* Fixed para que esté siempre visible */
+  position: fixed !important;
   bottom: 20px;
   right: 20px;
-  z-index: 9999 !important; /* Z-index muy alto */
+  z-index: 9999 !important;
   max-width: 450px;
   width: 90%;
   max-width: 450px;
-  display: block !important; /* Cambiar de flex a block */
+  display: block !important;
   align-items: unset;
   transition: all 0.3s ease;
   pointer-events: auto;
 }
 
-/* Mejorar la transición del container */
 .container.minimized {
   opacity: 0;
   transform: scale(0.95);
@@ -86,7 +85,6 @@
   pointer-events: none;
 }
 
-/* Botón de cerrar */
 .close-button {
   position: absolute;
   top: 15px;
@@ -112,7 +110,6 @@
   transform: scale(1.1);
 }
 
-/* Chat minimizado - mejorado */
 .chat-minimized {
   position: fixed;
   bottom: 20px;
@@ -126,14 +123,13 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  z-index: 9998 !important; /* Menor que el chat abierto */
+  z-index: 9998 !important;
   opacity: 0;
   transform: scale(0);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   visibility: hidden;
 }
 
-/* Animación de aparición mejorada */
 .chat-minimized.show {
   opacity: 1;
   transform: scale(1);
@@ -156,7 +152,7 @@
   gap: 15px;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Cambiar a oscuro para fondo claro */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .bot-avatar {
@@ -310,7 +306,6 @@
   transform: scale(1.1);
 }
 
-/* Contenedor de los botones */
 .option-buttons {
   display: flex;
   flex-direction: column;
@@ -319,7 +314,6 @@
   padding: 10px;
 }
 
-/* Estilo del botón */
 .chat-option-button {
   background: rgba(255, 255, 255, 0.1);
   color: white;
@@ -338,14 +332,12 @@
   animation: slideIn 0.3s ease-out forwards;
 }
 
-/* Efecto hover */
 .chat-option-button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
 }
 
-/* Animaciones fadeIn para entradas */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -357,7 +349,6 @@
   }
 }
 
-/* Animación de cierre mejorada */
 @keyframes shrinkToCorner {
   0% {
     transform: scale(1) translate(0, 0);
@@ -426,7 +417,6 @@
   }
 }
 
-/* Animación de pulso mejorada para el botón minimizado */
 @keyframes pulse {
   0%,
   100% {
@@ -450,7 +440,6 @@
   }
 }
 
-/* RESPONSIVE MEJORADO PARA MÓVILES */
 @media (max-width: 768px) {
   .container {
     position: fixed !important;
@@ -460,8 +449,8 @@
     top: 0;
     width: 100% !important;
     max-width: 100% !important;
-    height: 100vh; /* Cambiar a vh normal */
-    height: calc(var(--vh, 1vh) * 100); /* Usar variable CSS personalizada */
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     z-index: 9999 !important;
     display: flex !important;
     align-items: center;
@@ -469,7 +458,7 @@
   }
   .chat-demo {
     height: 90vh;
-    height: calc(var(--vh, 1vh) * 90); /* Usar variable personalizada */
+    height: calc(var(--vh, 1vh) * 90);
     max-height: 90vh;
     max-height: calc(var(--vh, 1vh) * 90);
     width: 95%;
@@ -480,7 +469,6 @@
     overflow: hidden;
   }
 
-  /* Animación específica para móvil - mejorada */
   .chat-demo.closing {
     animation: shrinkToCornerMobile 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
       forwards;
@@ -563,7 +551,6 @@
   }
 }
 
-/* Animación específica para móvil mejorada */
 @keyframes shrinkToCornerMobile {
   0% {
     transform: scale(1);
@@ -655,7 +642,6 @@
   }
 }
 
-/* Animación reversa para móvil */
 @keyframes expandFromCornerMobile {
   0% {
     transform: scale(0.1);
@@ -679,7 +665,6 @@
   }
 }
 
-/* Clase para aplicar la animación de apertura */
 .chat-demo.opening {
   animation: expandFromCorner 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   visibility: visible;

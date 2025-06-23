@@ -1,27 +1,29 @@
-import { 
-  questions, 
-  currentQuestionIndex, 
-  userData, 
+import {
+  questions,
+  currentQuestionIndex,
+  userData,
   analysisData,
   loadQuestions,
   incrementQuestionIndex,
-  questionMap
+  questionMap,
 } from "../core/state.js";
 
 import { addMessage } from "../ui/render.js";
 
 import { analyzer } from "../core/analyzer.js";
+import { recommendationEngine } from "../handlers/recommendations.js";
 import { nextQuestionByIndex, nextQuestionById } from "./questionFlow.js";
 import { renderBotMessage, showTyping, hideTyping } from "../ui/render.js";
 import { disableInput, enableInput } from "../ui/input.js";
-import { handleNameInput } from "./initialOptions.js"
+import { handleNameInput } from "./initialOptions.js";
 
-// Para asegurar que las preguntas están cargadas antes
 export async function initializeChat() {
   await loadQuestions();
 
   if (questions.length === 0) {
-    console.error("No se pudieron cargar preguntas para iniciar la conversación.");
+    console.error(
+      "No se pudieron cargar preguntas para iniciar la conversación."
+    );
     enableInput();
     return;
   }
@@ -34,45 +36,49 @@ export function processUserInput(answer) {
 
   if (!Array.isArray(questions) || questions.length === 0) {
     console.error("Error: no hay preguntas cargadas.");
-    // ✅ REMOVIDO: enableInput();
+
     return;
   }
 
   if (currentQuestionIndex < 0 || currentQuestionIndex >= questions.length) {
-    console.error("Error: currentQuestionIndex fuera de rango.", currentQuestionIndex);
-    // ✅ REMOVIDO: enableInput();
+    console.error(
+      "Error: currentQuestionIndex fuera de rango.",
+      currentQuestionIndex
+    );
+
     return;
   }
 
- const q = questions[currentQuestionIndex];
+  const q = questions[currentQuestionIndex];
 
   if (!q) {
-    console.error("Error: current question is undefined. currentQuestionIndex:", currentQuestionIndex);
-    // ✅ REMOVIDO: enableInput();
+    console.error(
+      "Error: current question is undefined. currentQuestionIndex:",
+      currentQuestionIndex
+    );
+
     return;
   }
 
   addMessage("user", answer, "👤");
-  // ✅ REMOVIDO: disableInput(); - Ya no bloqueamos el input
 
-  // 🔥 MOSTRAR TYPING MIENTRAS SE ANALIZA
   console.log("💭 Iniciando análisis - mostrando typing");
   showTyping();
 
-  // Simular delay realista para análisis + mostrar la animación
   setTimeout(() => {
     console.log("🔍 Analizando respuesta del usuario");
-    
-    // 🔧 CORRECCIÓN: Orden correcto de parámetros
+
     const analysis = analyzer.analyzeResponse(answer, q);
 
     userData[q.id] = answer;
     analysisData[q.id] = analysis;
 
     localStorage.setItem("chat_serenlive_data", JSON.stringify(userData));
-    localStorage.setItem("chat_serenlive_analysis", JSON.stringify(analysisData));
+    localStorage.setItem(
+      "chat_serenlive_analysis",
+      JSON.stringify(analysisData)
+    );
 
-    // 🔥 OCULTAR TYPING ANTES DE MOSTRAR RESPUESTA
     console.log("✅ Análisis completado - ocultando typing");
     hideTyping();
 
@@ -83,46 +89,55 @@ export function processUserInput(answer) {
     } else {
       handleInputQuestion(q, answer, analysis);
     }
-  }, 1200); // 1.2 segundos para que se vea bien la animación
+  }, 1200);
 }
 
 function handleInputQuestion(q, answer, analysis) {
-  console.log("🔍 handleInputQuestion - question:", q.id, "analysis:", analysis);
-  
-  const hasDetection = (analysis.foundKeywords && analysis.foundKeywords.length > 0) || 
-                      (analysis.category && analysis.category !== 'neutral' && analysis.category !== 'unknown');
-  
+  console.log(
+    "🔍 handleInputQuestion - question:",
+    q.id,
+    "analysis:",
+    analysis
+  );
+
+  const hasDetection =
+    (analysis.foundKeywords && analysis.foundKeywords.length > 0) ||
+    (analysis.category &&
+      analysis.category !== "neutral" &&
+      analysis.category !== "unknown");
+
   console.log("🎯 Detection found:", hasDetection);
 
-  // Caso 1: Si el usuario está confundido
   if (analysis.isConfused) {
     console.log("😕 Usuario confundido, mostrando pregunta alternativa");
-    
-    const confusionResponse = analysis.responseMessage || q.respuesta_confusion || "No te preocupes, vamos paso a paso.";
+
+    const confusionResponse =
+      analysis.responseMessage ||
+      q.respuesta_confusion ||
+      "No te preocupes, vamos paso a paso.";
     renderBotMessage(confusionResponse, "bot", () => {
-      // 🔥 MOSTRAR TYPING PARA LA PREGUNTA ALTERNATIVA
       showTyping();
       setTimeout(() => {
         hideTyping();
-        const alternativeQuestion = analysis.alternativeQuestion || q.alternative_question || q.message;
+        const alternativeQuestion =
+          analysis.alternativeQuestion || q.alternative_question || q.message;
         renderBotMessage(alternativeQuestion, "bot", () => {
-          console.log("✅ Pregunta alternativa mostrada - input sigue disponible");
-          // ✅ REMOVIDO: enableInput(); - El input nunca se bloqueó
+          console.log(
+            "✅ Pregunta alternativa mostrada - input sigue disponible"
+          );
         });
       }, 800);
     });
     return;
   }
 
-  // Caso 2: Si se detectó algo (keywords o categoría válida)
   if (hasDetection && analysis.responseMessage) {
     console.log("✅ Detección exitosa, mostrando mensaje de respuesta");
     console.log("💬 Mensaje a mostrar:", analysis.responseMessage);
-    
+
     renderBotMessage(analysis.responseMessage, "bot", () => {
       console.log("✅ Callback de renderBotMessage ejecutado");
-      
-      // 🔥 MOSTRAR TYPING ANTES DE LA SIGUIENTE PREGUNTA
+
       showTyping();
       setTimeout(() => {
         hideTyping();
@@ -133,10 +148,8 @@ function handleInputQuestion(q, answer, analysis) {
     return;
   }
 
-  // Caso 3: No se detectó nada específico - avanzar directamente
   console.log("➡️ No se detectó nada específico, avanzando directamente");
-  
-  // 🔥 BREVE TYPING ANTES DE CONTINUAR
+
   showTyping();
   setTimeout(() => {
     hideTyping();
@@ -145,48 +158,67 @@ function handleInputQuestion(q, answer, analysis) {
   }, 600);
 }
 
-// Función auxiliar para avanzar a la siguiente pregunta - CORREGIDA
 function goToNextQuestion(currentQuestion, analysis = null) {
   console.log("🔄 goToNextQuestion - Avanzando desde:", currentQuestion.id);
-  console.log("📊 Estado actual - currentQuestionIndex:", currentQuestionIndex, "total questions:", questions.length);
-  
-  // 1. Usar nextQuestion del analysis si está disponible
+  console.log(
+    "📊 Estado actual - currentQuestionIndex:",
+    currentQuestionIndex,
+    "total questions:",
+    questions.length
+  );
+
   if (analysis && analysis.nextQuestion) {
-    console.log("🎯 Analysis tiene nextQuestion específico:", analysis.nextQuestion);
+    console.log(
+      "🎯 Analysis tiene nextQuestion específico:",
+      analysis.nextQuestion
+    );
     const nextIndex = questionMap[analysis.nextQuestion];
     if (nextIndex !== undefined) {
-      console.log("➡️ Navegando por analysis a:", analysis.nextQuestion, "índice:", nextIndex);
+      console.log(
+        "➡️ Navegando por analysis a:",
+        analysis.nextQuestion,
+        "índice:",
+        nextIndex
+      );
       nextQuestionById(analysis.nextQuestion);
       return;
     }
   }
-  
-  // 2. Verificar si hay un 'next' específico en la pregunta
+
   if (currentQuestion.next) {
     console.log("🎯 Pregunta tiene 'next' específico:", currentQuestion.next);
-    
-    if (typeof currentQuestion.next === 'string') {
-      // Es un ID específico
+
+    if (typeof currentQuestion.next === "string") {
       const nextIndex = questionMap[currentQuestion.next];
       if (nextIndex !== undefined) {
-        console.log("➡️ Navegando por ID a:", currentQuestion.next, "índice:", nextIndex);
+        console.log(
+          "➡️ Navegando por ID a:",
+          currentQuestion.next,
+          "índice:",
+          nextIndex
+        );
         nextQuestionById(currentQuestion.next);
         return;
       } else {
-        console.error("❌ ID de siguiente pregunta no encontrado:", currentQuestion.next);
-        // Fallback: avanzar al siguiente índice
+        console.error(
+          "❌ ID de siguiente pregunta no encontrado:",
+          currentQuestion.next
+        );
+
         console.log("🔄 Fallback: avanzando al siguiente índice");
         nextQuestionByIndex();
         return;
       }
-    } else if (typeof currentQuestion.next === 'object') {
-      console.log("⚠️ 'next' es un objeto, esto debería manejarse en handleOptionsQuestion");
-      // Fallback: avanzar al siguiente índice
+    } else if (typeof currentQuestion.next === "object") {
+      console.log(
+        "⚠️ 'next' es un objeto, esto debería manejarse en handleOptionsQuestion"
+      );
+
       nextQuestionByIndex();
       return;
     }
   }
-  
+
   console.log("📈 Avanzando al siguiente índice...");
   nextQuestionByIndex();
 }
@@ -194,22 +226,60 @@ function goToNextQuestion(currentQuestion, analysis = null) {
 function handleOptionsQuestion(q, answer, analysis) {
   console.log("🔘 handleOptionsQuestion - question:", q.id);
   console.log("🔘 Analysis:", analysis);
-  
-  // Usar el analysis del analyzer si está disponible
+
+  if (q.id === "recomendacion_final") {
+    console.log("🎯 Detectada pregunta de recomendación final");
+
+    const selected = analysis.selectedOption || analysis.category;
+    console.log("🎯 Opción seleccionada para recomendación:", selected);
+
+    if (
+      selected === "si_recomendacion" ||
+      selected === "usado" ||
+      (analysis.foundKeywords &&
+        analysis.foundKeywords.some((kw) =>
+          ["si", "sí", "dale", "adelante", "perfecto", "genial"].includes(
+            kw.toLowerCase()
+          )
+        ))
+    ) {
+      console.log("✅ Usuario quiere recomendación - iniciando generación");
+
+      if (analysis.responseMessage) {
+        renderBotMessage(analysis.responseMessage, "bot", () => {
+          setTimeout(() => {
+            handleRecommendationGeneration();
+          }, 1000);
+        });
+      } else {
+        handleRecommendationGeneration();
+      }
+      return;
+    } else if (selected === "mas_preguntas") {
+      console.log("🤔 Usuario tiene más preguntas");
+      renderBotMessage(
+        "¿Qué te gustaría saber antes de recibir tu recomendación?",
+        "bot",
+        () => {
+          console.log("✅ Input habilitado para preguntas adicionales");
+        }
+      );
+      return;
+    }
+  }
+
   let selected = analysis.selectedOption || analysis.category;
-  
-  // Fallback a la lógica anterior si no se detectó en el analyzer
+
   if (!selected) {
     const lower = answer.toLowerCase();
-    
+
     for (let [value, kws] of Object.entries(q.keywords || {})) {
-      if (Array.isArray(kws) && kws.some(kw => lower.includes(kw))) {
+      if (Array.isArray(kws) && kws.some((kw) => lower.includes(kw))) {
         selected = value;
         break;
       }
     }
 
-    // Si aún no hay selección, usar la primera opción
     if (!selected && q.options?.length) {
       selected = q.options[0].value;
     }
@@ -220,26 +290,28 @@ function handleOptionsQuestion(q, answer, analysis) {
   userData[q.id + "_selected"] = selected;
   localStorage.setItem("chat_serenlive_data", JSON.stringify(userData));
 
-  // Usar el mensaje del analysis si está disponible
   let responseMessage = analysis.responseMessage;
-  
-  // Fallback a la respuesta específica de la opción
-  if (!responseMessage && q.respuesta_si_detecta && typeof q.respuesta_si_detecta === 'object') {
+
+  if (
+    !responseMessage &&
+    q.respuesta_si_detecta &&
+    typeof q.respuesta_si_detecta === "object"
+  ) {
     responseMessage = q.respuesta_si_detecta[selected];
   }
 
   if (responseMessage) {
     console.log("💬 Mostrando respuesta para opción:", selected);
     console.log("💬 Mensaje:", responseMessage);
-    
+
     renderBotMessage(responseMessage, "bot", () => {
-      // 🔥 TYPING ANTES DE LA SIGUIENTE PREGUNTA
       showTyping();
       setTimeout(() => {
         hideTyping();
-        const nextId = (analysis && analysis.nextQuestion) || 
-                      (q.next && typeof q.next === 'object' ? q.next[selected] : q.next);
-        
+        const nextId =
+          (analysis && analysis.nextQuestion) ||
+          (q.next && typeof q.next === "object" ? q.next[selected] : q.next);
+
         if (nextId) {
           console.log("➡️ Navegando por opción a:", nextId);
           nextQuestionById(nextId);
@@ -251,14 +323,14 @@ function handleOptionsQuestion(q, answer, analysis) {
     });
   } else {
     console.log("➡️ Sin respuesta específica, avanzando directamente");
-    
-    // 🔥 BREVE TYPING ANTES DE CONTINUAR
+
     showTyping();
     setTimeout(() => {
       hideTyping();
-      const nextId = (analysis && analysis.nextQuestion) || 
-                    (q.next && typeof q.next === 'object' ? q.next[selected] : q.next);
-      
+      const nextId =
+        (analysis && analysis.nextQuestion) ||
+        (q.next && typeof q.next === "object" ? q.next[selected] : q.next);
+
       if (nextId) {
         console.log("➡️ Navegando por opción a:", nextId);
         nextQuestionById(nextId);
@@ -270,13 +342,136 @@ function handleOptionsQuestion(q, answer, analysis) {
   }
 }
 
-// Función para manejar la generación de recomendaciones
 function handleRecommendationGeneration() {
   console.log("🎯 Generando recomendación final...");
-  // Aquí implementarías la lógica para generar la recomendación final
+
   renderBotMessage("Generando tu recomendación personalizada...", "bot", () => {
-    // Lógica de recomendación aquí
-    // ✅ REMOVIDO: enableInput(); - El input nunca se bloqueó
-    console.log("✅ Recomendación generada - input sigue disponible");
+    console.log("💭 Iniciando análisis de recomendación");
+
+    showTyping();
+
+    setTimeout(() => {
+      hideTyping();
+      console.log("🔍 Generando recomendación con analyzer");
+
+      try {
+        const recommendation = analyzer.generateRecommendation();
+        console.log("📊 Recomendación generada:", recommendation);
+
+        const finalMessage = `🎯 **Tu Análisis Personalizado Completo**
+
+📊 **Nivel de estrés detectado:** ${recommendation.riskLabel} (${
+          recommendation.normalizedScore
+        }%)
+
+🔹 **Dosis recomendada:** ${recommendation.dosage}
+🕒 **Horario sugerido:** ${recommendation.timing}
+⏳ **Duración sugerida:** ${recommendation.duration}
+
+💡 **Consejos adicionales:**
+${recommendation.additionalTips.map((tip) => `• ${tip}`).join("\n")}
+
+🍎 **Sugerencias de estilo de vida:**
+• **Nutrición:** ${recommendation.lifestyle.nutrition.join(", ")}
+• **Ejercicio:** ${recommendation.lifestyle.exercise.join(", ")}
+• **Sueño:** ${recommendation.lifestyle.sleep.join(", ")}
+
+📋 **Plan de seguimiento:**
+• Frecuencia: ${recommendation.followUp.frequency}
+• Duración: ${recommendation.followUp.duration}
+
+¡Gracias por confiar en Serenlive! Estoy aquí para acompañarte en tu bienestar. 💚🌿`;
+
+        console.log("💬 Mensaje final preparado");
+
+        renderBotMessage(finalMessage, "bot", () => {
+          console.log(
+            "✅ Recomendación mostrada - iniciando timeout para opciones"
+          );
+
+          setTimeout(() => {
+            console.log("⏰ Timeout completado - importando opciones");
+
+            import("./initialOptions.js")
+              .then(({ showPostRecommendationOptions }) => {
+                console.log("📥 Módulo importado exitosamente");
+                showPostRecommendationOptions();
+              })
+              .catch((error) => {
+                console.error(
+                  "❌ Error importando showPostRecommendationOptions:",
+                  error
+                );
+
+                console.log("🔄 Ejecutando fallback manual");
+                renderBotMessage("¿Te gustaría hacer algo más?", "bot", () => {
+                  import("../ui/render.js")
+                    .then(({ renderButtonOptions }) => {
+                      const options = [
+                        { id: "nuevo_test", text: "Hacer otro test" },
+                        { id: "que_es", text: "¿Qué es Serenlive?" },
+                        { id: "ingredientes", text: "¿De qué está hecho?" },
+                        { id: "fin", text: "Terminar conversación" },
+                      ];
+
+                      renderButtonOptions(options, (optionId) => {
+                        console.log("🔘 Opción seleccionada:", optionId);
+
+                        if (optionId === "nuevo_test") {
+                          location.reload();
+                        } else if (optionId === "fin") {
+                          renderBotMessage(
+                            "¡Gracias por usar Serenlive! 😊 ¡Que tengas un excelente día!",
+                            "bot"
+                          );
+                        } else if (optionId === "que_es") {
+                          renderBotMessage(
+                            "Serenlive es una tira sublingual natural para el manejo del estrés...",
+                            "bot"
+                          );
+                        } else if (optionId === "ingredientes") {
+                          renderBotMessage(
+                            "Serenlive contiene extractos naturales de ashwagandha, pasiflora y valeriana...",
+                            "bot"
+                          );
+                        }
+                      });
+                    })
+                    .catch(console.error);
+                });
+              });
+          }, 3000);
+        });
+      } catch (error) {
+        console.error("❌ Error generando recomendación:", error);
+
+        renderBotMessage(
+          "✅ **Análisis Completado**\n\nBasado en tus respuestas, te recomendamos usar Serenlive según las indicaciones del producto para ayudarte a manejar el estrés de manera natural.\n\n¡Gracias por confiar en Serenlive! 💚",
+          "bot",
+          () => {
+            setTimeout(() => {
+              renderBotMessage("¿Te gustaría hacer algo más?", "bot", () => {
+                import("../ui/render.js")
+                  .then(({ renderButtonOptions }) => {
+                    const options = [
+                      { id: "nuevo_test", text: "Hacer otro test" },
+                      { id: "fin", text: "Terminar conversación" },
+                    ];
+
+                    renderButtonOptions(options, (optionId) => {
+                      if (optionId === "nuevo_test") {
+                        location.reload();
+                      } else {
+                        renderBotMessage("¡Hasta pronto! 😊", "bot");
+                      }
+                    });
+                  })
+                  .catch(console.error);
+              });
+            }, 2000);
+          }
+        );
+      }
+    }, 2000);
   });
 }
