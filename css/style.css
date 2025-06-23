@@ -554,12 +554,6 @@ header nav > ul li a.active::after {
   }
 }
 
-.cta-button-inf:hover {
-  background-color: #219150;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6);
-}
-
 /* Secciones con animaciones */
 section {
   padding: 100px 20px;
@@ -663,6 +657,7 @@ section h2::after {
 }
 
 #quienes-somos h2 {
+  margin-top: 60px;
   font-size: 2.5rem;
   font-weight: 600;
   text-align: center;

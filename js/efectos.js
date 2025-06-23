@@ -2,7 +2,7 @@ if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 
-document.documentElement.style.scrollBehavior = "auto";
+document.documentElement.style.scrollBehavior = "smooth";
 
 document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector("header");
