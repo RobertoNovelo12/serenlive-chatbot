@@ -237,8 +237,6 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 ## 🙏 Agradecimientos
 
 - Equipo de Serenlive por la especificación del producto
-- Comunidad de desarrolladores por las mejores prácticas
-- Usuarios beta por sus valiosos comentarios
 
 ---
 
