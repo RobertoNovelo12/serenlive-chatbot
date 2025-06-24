@@ -92,43 +92,38 @@
         </p>
       </div>
     </section>
-    <!-- CHATBOT -->
+<!-- CHATBOT -->
+<div class="container" id="chatContainer">
+  <div class="chat-demo">
+    <!-- Botón de cerrar -->
+    <button class="close-button" id="closeButton" onclick="minimizeChat()">×</button>
 
-    <div class="container" id="chatContainer">
-      <div class="chat-demo">
-        <!-- Botón de cerrar -->
-        <button class="close-button" id="closeButton" onclick="minimizeChat()">
-          ×
-        </button>
-
-        <div class="chat-header">
-          <div class="bot-avatar">🤖</div>
-          <div>
-            <div class="chat-title">Serenlive</div>
-            <div class="chat-subtitle">En línea • Siempre disponible</div>
-          </div>
-        </div>
-
-        <div class="chat-messages" id="chatMessages">
-          <div class="message bot" style="animation-delay: 0.5s"></div>
-        </div>
-
-        <div class="chat-input">
-          <input
-            type="text"
-            class="input-field"
-            placeholder="Escribe tu nombre..."
-            id="nameInput"
-          />
-          <button class="send-button" onclick="sendName()">→</button>
-        </div>
+    <div class="chat-header">
+      <div class="bot-avatar">🤖</div>
+      <div>
+        <div class="chat-title">Serenlive</div>
+        <div class="chat-subtitle">En línea • Siempre disponible</div>
       </div>
     </div>
 
-    <!-- Chat minimizado - ahora con badge de notificación -->
-    <div class="chat-minimized" id="chatMinimized" onclick="maximizeChat()">
-      <div class="bot-icon">🤖</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot" style="animation-delay: 0.5s"></div>
     </div>
+
+    <!-- NUEVO: Botón scroll to bottom -->
+    <button class="scroll-to-bottom" id="scrollToBottomBtn" title="Ir al final">↓</button>
+
+    <div class="chat-input">
+      <input type="text" class="input-field" placeholder="Escribe tu nombre..." id="nameInput" />
+      <button class="send-button" onclick="sendName()">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chat minimizado -->
+<div class="chat-minimized" id="chatMinimized" onclick="maximizeChat()">
+  <div class="bot-icon">🤖</div>
+</div>
 
     <section id="informacion">
       <h2>Beneficios de Nuestros Ingredientes</h2>
