@@ -11,20 +11,12 @@ import { disableInput, enableInput } from "../ui/input.js";
 import { handleRecommendationGeneration } from "./recommendation-handler.js";
 
 export function nextQuestionByIndex() {
-  console.log(
-    "🔄 nextQuestionByIndex called, current index:",
-    currentQuestionIndex
-  );
   incrementQuestionIndex();
   moveToNext();
 }
 
 export function nextQuestionById(nextId) {
   if (questionMap[nextId] !== undefined) {
-    console.log(
-      "✅ Found question ID in map, setting index to:",
-      questionMap[nextId]
-    );
     setCurrentQuestionIndex(questionMap[nextId]);
   } else {
     incrementQuestionIndex();
@@ -33,10 +25,6 @@ export function nextQuestionById(nextId) {
 }
 
 function moveToNext() {
-  console.log(
-    "➡️ moveToNext called, currentQuestionIndex:",
-    currentQuestionIndex
-  );
   const currentQ = questions[currentQuestionIndex];
 
   if (!currentQ) {

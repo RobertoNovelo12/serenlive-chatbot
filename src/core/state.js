@@ -13,12 +13,6 @@ export function setCurrentQuestionIndex(index) {
 }
 
 export function incrementQuestionIndex() {
-  console.log(
-    "⬆️ incrementQuestionIndex:",
-    currentQuestionIndex,
-    "→",
-    currentQuestionIndex + 1
-  );
   currentQuestionIndex++;
 }
 
@@ -32,12 +26,6 @@ export function updateState(newState) {
     Object.assign(questionMap, newState.questionMap);
   }
   if (newState.currentQuestionIndex !== undefined) {
-    console.log(
-      "📍 CurrentQuestionIndex updated:",
-      currentQuestionIndex,
-      "→",
-      newState.currentQuestionIndex
-    );
     currentQuestionIndex = newState.currentQuestionIndex;
   }
   if (newState.conversationStep !== undefined) {
@@ -80,25 +68,20 @@ export async function loadQuestions() {
 }
 
 export function resetQuestionIndex() {
-  console.log("🔄 Reseteando question index de", currentQuestionIndex, "a 0");
   currentQuestionIndex = 0;
 }
 
 export function resetConversationStep() {
-  console.log("🔄 Reseteando conversation step de", conversationStep, "a 0");
   conversationStep = 0;
 }
 
 export function clearAnalysisData() {
-  console.log("🧹 Limpiando analysisData");
   Object.keys(analysisData).forEach((key) => {
     delete analysisData[key];
   });
-  console.log("✅ AnalysisData limpio:", analysisData);
 }
 
 export function resetUserData(keepName = true) {
-  console.log("🔄 Reseteando userData (keepName:", keepName, ")");
 
   const currentName = keepName ? userData.name : undefined;
 
@@ -108,71 +91,37 @@ export function resetUserData(keepName = true) {
 
   if (keepName && currentName) {
     userData.name = currentName;
-    console.log("👤 Nombre mantenido:", currentName);
   }
 
   userData._waitingForName = false;
 
-  console.log("✅ UserData reset:", userData);
 }
 
 export function clearShownOptions() {
-  console.log("🧹 Limpiando shownOptions");
   shownOptions.clear();
-  console.log("✅ ShownOptions limpio");
 }
 
 export function resetAnalyzer() {
-  console.log("🔄 Intentando resetear analyzer");
-
   if (
     typeof window !== "undefined" &&
     window.analyzer &&
     window.analyzer.reset
   ) {
     window.analyzer.reset();
-    console.log("✅ Analyzer reseteado via window");
-  } else if (
+    } else if (
     typeof global !== "undefined" &&
     global.analyzer &&
     global.analyzer.reset
   ) {
     global.analyzer.reset();
-    console.log("✅ Analyzer reseteado via global");
-  } else {
-    console.log("ℹ️ Analyzer no disponible para reset o no tiene método reset");
   }
 }
 
 export function resetTestData(keepUserName = true) {
-  console.log("🔄 INICIANDO RESET COMPLETO PARA NUEVO TEST");
-  console.log("🔄 KeepUserName:", keepUserName);
-
   resetQuestionIndex();
   resetConversationStep();
-
   clearAnalysisData();
-
   resetUserData(keepUserName);
-
   clearShownOptions();
-
   resetAnalyzer();
-
-  localStorage.setItem("chat_serenlive_data", JSON.stringify(userData));
-  localStorage.removeItem("chat_serenlive_analysis");
-
-  console.log("✅ RESET COMPLETO TERMINADO");
-  console.log("📊 Estado final:");
-  console.log("   - currentQuestionIndex:", currentQuestionIndex);
-  console.log("   - conversationStep:", conversationStep);
-  console.log("   - userData:", userData);
-  console.log("   - analysisData:", analysisData);
-  console.log("   - shownOptions size:", shownOptions.size);
-}
-
-export function resetEverything() {
-  console.log("🔄 RESET TOTAL - Limpiando todo incluyendo nombre");
-  resetTestData(false);
-  console.log("✅ RESET TOTAL COMPLETO");
 }

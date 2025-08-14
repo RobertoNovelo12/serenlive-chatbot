@@ -7,10 +7,6 @@ export function disableInput() {
       document.querySelector("input") ||
       document.querySelector("#chat-input");
     if (alternativeInput) {
-      console.log(
-        "✅ Usando elemento alternativo:",
-        alternativeInput.id || alternativeInput.className
-      );
       alternativeInput.disabled = true;
       alternativeInput.placeholder = "Selecciona una opción para continuar...";
       return;

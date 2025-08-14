@@ -18,12 +18,6 @@ export class RecommendationEngine {
       100
     );
 
-    console.log("📊 Final calculation:", {
-      totalScore,
-      maxPossibleScore,
-      normalizedScore: Math.round(normalizedScore),
-    });
-
     const riskLevel = this.calculateRiskLevel(normalizedScore);
 
     return {
@@ -51,12 +45,6 @@ export class RecommendationEngine {
 
     Object.keys(adjusted).forEach((key) => {
       if (adjusted[key] < 0) {
-        console.log(
-          "⚠️ Corrigiendo score negativo:",
-          key,
-          adjusted[key],
-          "→ 0"
-        );
         adjusted[key] = 0;
       }
     });

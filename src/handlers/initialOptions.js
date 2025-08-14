@@ -28,8 +28,6 @@ export function showInitialOptions() {
 }
 
 export function showPostRecommendationOptions() {
-  console.log("🔄 Mostrando opciones post-recomendación");
-
   const options = [
     { id: "nuevo_test", text: "Hacer otro test" },
     { id: "que_es", text: "¿Qué es Serenlive?" },
@@ -43,8 +41,6 @@ export function showPostRecommendationOptions() {
 }
 
 export function handlePostRecommendationOptionClick(optionId) {
-  console.log("🔘 Opción post-recomendación seleccionada:", optionId);
-
   if (optionId === "nuevo_test") {
     resetForNewTest();
     startTestFlow();
@@ -66,7 +62,6 @@ export function handlePostRecommendationOptionClick(optionId) {
     renderBotMessage(
       "¡Gracias por usar Serenlive! 😊 Espero que la información te haya sido útil. ¡Que tengas un excelente día!",
       () => {
-        console.log("✅ Conversación terminada");
 
         setTimeout(() => {
           renderButtonOptions(
@@ -84,15 +79,12 @@ export function handlePostRecommendationOptionClick(optionId) {
 }
 
 export function resetForNewTest() {
-  console.log("🔄 Reseteando sistema para nuevo test");
 
   try {
     resetTestData(true);
-    console.log("✅ Sistema reseteado para nuevo test usando resetTestData");
   } catch (error) {
     console.error("Error usando resetTestData:", error);
 
-    console.log("🔄 Ejecutando fallback manual");
     const currentName = userData.name;
 
     Object.keys(userData).forEach((key) => {
@@ -105,8 +97,6 @@ export function resetForNewTest() {
     userData._waitingForName = false;
     localStorage.setItem("chat_serenlive_data", JSON.stringify(userData));
     localStorage.removeItem("chat_serenlive_analysis");
-
-    console.log("✅ Sistema reseteado manualmente");
   }
 }
 

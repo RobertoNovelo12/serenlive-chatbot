@@ -46,8 +46,6 @@ export class SerenliveAnalyzer {
   }
 
   analyzeResponse(userInput, questionData) {
-    console.log("Analizando respuesta:", userInput);
-    console.log("Datos de pregunta:", questionData);
 
     if (!questionData || !userInput) {
       return {
@@ -60,7 +58,6 @@ export class SerenliveAnalyzer {
     const questionId = questionData.id;
 
     if (questionId === "recomendacion_final") {
-      console.log("🎯 Procesando pregunta de recomendación final");
 
       const wantsRecommendation = this.checkForRecommendationRequest(
         userInput,
@@ -109,7 +106,6 @@ export class SerenliveAnalyzer {
 
     result.nextQuestion = this.getNextQuestion(result, questionData);
 
-    console.log("Resultado del análisis:", result);
 
     return result;
   }
@@ -126,10 +122,6 @@ export class SerenliveAnalyzer {
 
     const foundYesKeywords = this.findKeywordsInText(userInput, yesKeywords);
 
-    console.log("🔍 Verificando solicitud de recomendación:");
-    console.log("   Input:", userInput);
-    console.log("   Keywords YES encontradas:", foundYesKeywords);
-
     return foundYesKeywords.length > 0;
   }
   isConfused(userInput, questionData) {
@@ -144,14 +136,12 @@ export class SerenliveAnalyzer {
       userInput,
       questionData.confusion_keywords
     );
-    console.log("Keywords de confusión encontradas:", foundConfusionKeywords);
     return foundConfusionKeywords.length > 0;
   }
 
   analyzeByQuestionType(userInput, questionData) {
     const questionId = questionData.id;
 
-    console.log(`Analizando pregunta tipo: ${questionId}`);
 
     switch (questionId) {
       case "estado_animo":
@@ -247,9 +237,6 @@ export class SerenliveAnalyzer {
   analyzeSintomas(userInput, questionData) {
     const allKeywords = questionData.keywords || [];
     const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
-
-    console.log("Keywords de síntomas encontradas:", foundKeywords);
-
     if (foundKeywords.length === 0) {
       return { category: "no_symptoms", score: 0, foundKeywords: [] };
     }
@@ -291,14 +278,6 @@ export class SerenliveAnalyzer {
 
     this.weightedScores.symptoms = score;
 
-    console.log("Análisis de síntomas:", {
-      severity,
-      score,
-      symptomTypes,
-      totalSymptoms,
-      foundKeywords,
-    });
-
     return {
       category: severity,
       score,
@@ -319,8 +298,6 @@ export class SerenliveAnalyzer {
           optionKeywords
         );
         if (foundKeywords.length > 0) {
-          console.log("🔍 UsoProducto - NO afecta scoring:", optionValue);
-
           return {
             category: optionValue,
             score: 0,
@@ -345,9 +322,6 @@ export class SerenliveAnalyzer {
   analyzeRutinaSueno(userInput, questionData) {
     const allKeywords = questionData.keywords || [];
     const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
-
-    console.log("Análisis de sueño - keywords encontradas:", foundKeywords);
-
     if (foundKeywords.length > 0) {
       this.weightedScores.sleep_quality = 3;
 
@@ -385,11 +359,6 @@ export class SerenliveAnalyzer {
     const allKeywords = questionData.keywords || [];
     const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
 
-    console.log(
-      "Análisis de actividades - keywords encontradas:",
-      foundKeywords
-    );
-
     if (foundKeywords.length > 0) {
       this.lifestyleFactors["relaxation"] = 2;
       this.weightedScores.lifestyle = Object.values(
@@ -412,11 +381,6 @@ export class SerenliveAnalyzer {
     const allKeywords = questionData.keywords || [];
     const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
 
-    console.log(
-      "Análisis de alimentación - keywords encontradas:",
-      foundKeywords
-    );
-
     if (foundKeywords.length > 0) {
       this.lifestyleFactors["diet"] = 2;
       this.weightedScores.lifestyle = Object.values(
@@ -437,10 +401,6 @@ export class SerenliveAnalyzer {
 
   analyzeIntensidadNecesidad(userInput, questionData) {
     const result = this.scoreByScoringCategories(userInput, questionData);
-
-    console.log("🔍 IntensidadNecesidad - input:", userInput);
-    console.log("🔍 IntensidadNecesidad - result:", result);
-
     let needScore = 0;
     switch (result.category) {
       case "high_need":
@@ -455,11 +415,6 @@ export class SerenliveAnalyzer {
       default:
         const allKeywords = questionData.keywords || [];
         const foundKeywords = this.findKeywordsInText(userInput, allKeywords);
-
-        console.log(
-          "🔍 IntensidadNecesidad - keywords encontradas:",
-          foundKeywords
-        );
 
         if (foundKeywords.length > 0) {
           const highNeedKeywords = [
@@ -484,9 +439,6 @@ export class SerenliveAnalyzer {
 
           result.foundKeywords = foundKeywords;
         } else {
-          console.log(
-            "⚠️ Respuesta ambigua para intensidad, asignando score bajo"
-          );
           needScore = 1;
           result.category = "low_need";
         }
@@ -495,7 +447,6 @@ export class SerenliveAnalyzer {
     this.weightedScores.need_intensity = needScore;
     result.score = needScore;
 
-    console.log("🔍 IntensidadNecesidad - final score:", needScore);
 
     return result;
   }
@@ -638,18 +589,9 @@ export class SerenliveAnalyzer {
   getResponseMessage(result, questionData) {
     const respuesta = questionData.respuesta_si_detecta;
 
-    console.log("Obteniendo mensaje de respuesta:", {
-      questionId: questionData.id,
-      category: result.category,
-      selectedOption: result.selectedOption,
-      foundKeywords: result.foundKeywords,
-      respuesta: respuesta,
-    });
-
     if (respuesta && typeof respuesta === "object") {
       const messageKey = result.category || result.selectedOption;
       if (messageKey && respuesta[messageKey]) {
-        console.log("✅ Usando respuesta específica para:", messageKey);
         return respuesta[messageKey];
       }
     }
@@ -661,7 +603,6 @@ export class SerenliveAnalyzer {
           result.category !== "neutral" &&
           result.category !== "unknown")
       ) {
-        console.log("✅ Usando respuesta general del JSON");
         return respuesta;
       }
     }
@@ -672,13 +613,9 @@ export class SerenliveAnalyzer {
         result.category !== "neutral" &&
         result.category !== "unknown")
     ) {
-      console.log(
-        "⚠️ Detectado pero sin respuesta específica, usando genérico"
-      );
       return "Gracias por compartir esa información conmigo.";
     }
 
-    console.log("❌ No se detectó nada específico");
     return "Entiendo. Continuemos con las siguientes preguntas.";
   }
 
@@ -698,7 +635,6 @@ export class SerenliveAnalyzer {
   }
 
   generateRecommendation() {
-    console.log("🎯 GENERANDO RECOMENDACIÓN FINAL");
     this.getScores();
     return recommendationEngine.generateRecommendation(this.weightedScores);
   }
