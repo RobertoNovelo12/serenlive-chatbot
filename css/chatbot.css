@@ -161,6 +161,26 @@
   transition: none;
 }
 
+.chat-minimized:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.chat-minimized:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.close-button,
+.send-button,
+.scroll-to-bottom {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .chat-minimized.ready {
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -647,6 +667,11 @@
     height: 65px;
     bottom: 15px;
     right: 15px;
+    outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   }
 
   .chat-minimized .bot-icon {
