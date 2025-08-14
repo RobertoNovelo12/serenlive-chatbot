@@ -118,12 +118,12 @@ function maximizeChat() {
       isMinimized = false;
       hasNewMessages = false;
       isAnimating = false;
-    }, 350);
+    }, 150);
 
     if (badge) {
       badge.style.display = "none";
     }
-  }, 200);
+  }, 100);
 }
 
 function setVH() {
