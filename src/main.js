@@ -87,7 +87,7 @@ function minimizeChat() {
           isAnimating = false;
         }, 50);
       });
-    }, 350);
+    }, 50);
   });
 }
 

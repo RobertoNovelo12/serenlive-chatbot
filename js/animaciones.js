@@ -61,13 +61,7 @@ function initializeChatbot() {
   // Mostrar el chatbot inicialmente con animación
   setTimeout(() => {
     chatContainer.classList.add('show-initial');
-  }, 500); // Esperar 500ms antes de mostrar
-  
-  // Después de 2 segundos, minimizar automáticamente
-  setTimeout(() => {
-    minimizeChat();
-    startBounceAnimation();
-  }, 2500);
+  }, 100); // Esperar 500ms antes de mostrar
 }
 
 // Función para iniciar la animación de rebote
