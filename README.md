@@ -236,7 +236,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 🙏 Agradecimientos
 
-- Equipo de Serenlive por la especificación del producto
+- Equipo de Serenlive por la especificación del producto y brindar la oportunidad de colaborar.
 
 ---
 

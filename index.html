@@ -1,24 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="SerenLive - Soluciones naturales para el estrés y ansiedad con tecnología moderna"
-    />
-    <title>SerenLive - Bienestar Natural</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/chatbot.css" />
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>SerenLive - Solución Natural contra Estrés y Ansiedad</title>
+  <meta name="description" content="SerenLive es un suplemento natural con valeriana, passiflora, melissa y hoja de naranja. Con nuestro chatbot interactivo, recibe una dosis personalizada para reducir estrés y ansiedad. Sin efectos secundarios." />
+  <meta name="keywords" content="SerenLive, suplemento natural, estrés, ansiedad, valeriana, passiflora, melissa, hoja de naranja, remedio natural, bienestar, relajación, insomnio, salud mental, ansiedad tratamiento" />
+  <meta name="author" content="SerenLive" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph para redes sociales -->
+  <meta property="og:title" content="SerenLive - Bienestar Natural contra el Estrés" />
+  <meta property="og:description" content="Prueba el chatbot de SerenLive y recibe tu dosis personalizada de suplemento natural para reducir estrés y ansiedad. 100% natural y sin efectos secundarios." />
+  <meta property="og:image" content="https://serenlive-chatbot.vercel.app/img/banner.webp" />
+  <meta property="og:url" content="https://serenlive-chatbot.vercel.app" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:site_name" content="SerenLive" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SerenLive - Bienestar Natural contra el Estrés" />
+  <meta name="twitter:description" content="Descubre SerenLive: suplemento natural con ingredientes orgánicos para reducir el estrés y mejorar tu bienestar." />
+  <meta name="twitter:image" content="https://serenlive-chatbot.vercel.app/img/banner.webp" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+
+  <!-- Fuente y estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/chatbot.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Datos estructurados -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "SerenLive",
+    "image": "https://serenlive-chatbot.vercel.app/img/banner.webp",
+    "description": "Suplemento natural con valeriana, passiflora, melissa y hoja de naranja. Reduce estrés y ansiedad con absorción sublingual rápida.",
+    "brand": {
+      "@type": "Brand",
+      "name": "SerenLive"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://serenlive-chatbot.vercel.app",
+      "priceCurrency": "MXN",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+</head>
 
   <body>
     <header>
@@ -107,14 +143,14 @@
     </div>
 
     <div class="chat-messages" id="chatMessages">
-      <div class="message bot" style="animation-delay: 0.5s"></div>
+      <div class="message bot" style="animation-delay: 0.2s"></div>
     </div>
 
     <!-- Botón scroll to bottom -->
     <button class="scroll-to-bottom" id="scrollToBottomBtn" title="Ir al final">↓</button>
 
     <div class="chat-input">
-      <input type="text" class="input-field" placeholder="Escribe tu nombre..." id="nameInput" />
+      <input type="text" class="input-field" placeholder="Escribe tu mensaje..." id="nameInput" />
       <button class="send-button" onclick="sendName()">→</button>
     </div>
   </div>
@@ -208,7 +244,6 @@
               necesidades."
             </p>
             <footer>— Usuario feliz</footer>
-              
           </div>
         </div>
 
