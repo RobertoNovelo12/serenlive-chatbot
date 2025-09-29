@@ -5,6 +5,18 @@ if ("scrollRestoration" in history) {
 document.documentElement.style.scrollBehavior = "smooth";
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Verificar si estamos en la página de inicio
+  const isIndexPage = window.location.pathname === '/' || 
+                      window.location.pathname === '/index.html' || 
+                      window.location.pathname === '/inicio';
+  
+  // Siempre inicializar el lightbox en todas las páginas
+  initializeLightbox();
+
+  // ========================================
+  // CÓDIGO COMÚN PARA TODAS LAS PÁGINAS (incluido header animado)
+  // ========================================
+  
   const header = document.querySelector("header");
   const nav = header.querySelector("nav");
   const navUl = nav.querySelector("ul");
@@ -203,7 +215,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const progress = Math.min(scrollY / maxScroll, 1);
     const isCurrentlyMobile = isMobile();
 
-    if (isCurrentlyMobile) {
+    // Solo actualizar el nombre de marca en mobile Y solo en index
+    if (isCurrentlyMobile && isIndexPage) {
       updateBrandName(progress);
     }
 
@@ -461,119 +474,130 @@ document.addEventListener("DOMContentLoaded", function () {
 
   initializeHeaderSmoothly();
 
-  const sections = document.querySelectorAll("section");
-  const observer = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
+  // ========================================
+  // CÓDIGO EXCLUSIVO PARA INDEX.HTML
+  // ========================================
+  
+  if (isIndexPage) {
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      }
+    );
+
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+    const cards = document.querySelectorAll(".info-card");
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = card.offsetWidth / 2;
+        const centerY = card.offsetHeight / 2;
+        const angleX = (y - centerY) / 30;
+        const angleY = (centerX - x) / 30;
+        card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
       });
-    },
-    {
-      threshold: 0.1,
-      rootMargin: "0px 0px -100px 0px",
-    }
-  );
 
-  sections.forEach((section) => {
-    observer.observe(section);
-  });
-
-  const cards = document.querySelectorAll(".info-card");
-  cards.forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = card.offsetWidth / 2;
-      const centerY = card.offsetHeight / 2;
-      const angleX = (y - centerY) / 30;
-      const angleY = (centerX - x) / 30;
-      card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "perspective(1000px) rotateX(0) rotateY(0)";
+      });
     });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "perspective(1000px) rotateX(0) rotateY(0)";
-    });
-  });
+  }
 });
 
 window.addEventListener("beforeunload", function () {
   window.scrollTo(0, 0);
 });
 
-// ABRIR IMAGENES
-const lightboxHTML = `
-        <div class="lightbox-overlay" id="lightboxOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease;">
-            <button class="lightbox-close" id="lightboxClose" style="position: absolute; top: 20px; right: 40px; font-size: 40px; color: white; cursor: pointer; background: none; border: none; transition: transform 0.2s ease;">&times;</button>
-            <img src="" alt="" id="lightboxImage" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s ease;">
-        </div>
-        <style>
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            @keyframes zoomIn {
-                from { transform: scale(0.8); opacity: 0; }
-                to { transform: scale(1); opacity: 1; }
-            }
-            .lightbox-close:hover {
-                transform: scale(1.2);
-            }
-            .lightbox-img {
-                cursor: pointer;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            .lightbox-img:hover {
-                transform: scale(1.05);
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            }
-        </style>
-    `;
+// ========================================
+// LIGHTBOX - FUNCIONA EN TODAS LAS PÁGINAS
+// ========================================
 
-// Insertar el lightbox en el body
-document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+function initializeLightbox() {
+  const lightboxHTML = `
+    <div class="lightbox-overlay" id="lightboxOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease;">
+        <button class="lightbox-close" id="lightboxClose" style="position: absolute; top: 20px; right: 40px; font-size: 40px; color: white; cursor: pointer; background: none; border: none; transition: transform 0.2s ease;">&times;</button>
+        <img src="" alt="" id="lightboxImage" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s ease;">
+    </div>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .lightbox-close:hover {
+            transform: scale(1.2);
+        }
+        .lightbox-img {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .lightbox-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+  `;
 
-const overlay = document.getElementById('lightboxOverlay');
-const lightboxImg = document.getElementById('lightboxImage');
-const closeBtn = document.getElementById('lightboxClose');
+  // Insertar el lightbox en el body
+  document.body.insertAdjacentHTML('beforeend', lightboxHTML);
 
-// Función para abrir el lightbox
-function openLightbox(imgSrc, imgAlt) {
-  overlay.style.display = 'flex';
-  lightboxImg.src = imgSrc;
-  lightboxImg.alt = imgAlt || '';
-  document.body.style.overflow = 'hidden'; // Evitar scroll del body
+  const overlay = document.getElementById('lightboxOverlay');
+  const lightboxImg = document.getElementById('lightboxImage');
+  const closeBtn = document.getElementById('lightboxClose');
+
+  // Función para abrir el lightbox
+  function openLightbox(imgSrc, imgAlt) {
+    overlay.style.display = 'flex';
+    lightboxImg.src = imgSrc;
+    lightboxImg.alt = imgAlt || '';
+    document.body.style.overflow = 'hidden'; // Evitar scroll del body
+  }
+
+  // Función para cerrar el lightbox
+  function closeLightbox() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = ''; // Restaurar scroll
+  }
+
+  // Agregar evento de clic a todas las imágenes con la clase 'lightbox-img'
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('lightbox-img')) {
+      openLightbox(e.target.src, e.target.alt);
+    }
+  });
+
+  // Cerrar con el botón X
+  closeBtn.addEventListener('click', closeLightbox);
+
+  // Cerrar al hacer clic en el fondo
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closeLightbox();
+    }
+  });
+
+  // Cerrar con la tecla ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.style.display === 'flex') {
+      closeLightbox();
+    }
+  });
 }
-
-// Función para cerrar el lightbox
-function closeLightbox() {
-  overlay.style.display = 'none';
-  document.body.style.overflow = ''; // Restaurar scroll
-}
-
-// Agregar evento de clic a todas las imágenes con la clase 'lightbox-img'
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('lightbox-img')) {
-    openLightbox(e.target.src, e.target.alt);
-  }
-});
-
-// Cerrar con el botón X
-closeBtn.addEventListener('click', closeLightbox);
-
-// Cerrar al hacer clic en el fondo
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) {
-    closeLightbox();
-  }
-});
-
-// Cerrar con la tecla ESC
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && overlay.style.display === 'flex') {
-    closeLightbox();
-  }
-});

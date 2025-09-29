@@ -54,6 +54,16 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: auto;
+    padding-top: 150px;
+}
+
+.body-form{
+    padding-top: 50px;
+}
+
+
+body:not(.page-index) .nav-links a {
+    color: #000;
 }
 
 /* ===== TIPOGRAFÍA ===== */
