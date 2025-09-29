@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>SerenLive - Solución Natural contra Estrés y Ansiedad</title>
-  <meta name="description" content="SerenLive es un suplemento natural con valeriana, passiflora, melissa y hoja de naranja. Con nuestro chatbot interactivo, recibe una dosis personalizada para reducir estrés y ansiedad. Sin efectos secundarios." />
-  <meta name="keywords" content="SerenLive, suplemento natural, estrés, ansiedad, valeriana, passiflora, melissa, hoja de naranja, remedio natural, bienestar, relajación, insomnio, salud mental, ansiedad tratamiento" />
+  <meta name="description"
+    content="SerenLive es un suplemento natural con valeriana, passiflora, melissa y hoja de naranja. Con nuestro chatbot interactivo, recibe una dosis personalizada para reducir estrés y ansiedad. Sin efectos secundarios." />
+  <meta name="keywords"
+    content="SerenLive, suplemento natural, estrés, ansiedad, valeriana, passiflora, melissa, hoja de naranja, remedio natural, bienestar, relajación, insomnio, salud mental, ansiedad tratamiento" />
   <meta name="author" content="SerenLive" />
   <meta name="robots" content="index, follow" />
 
   <!-- Open Graph para redes sociales -->
   <meta property="og:title" content="SerenLive - Bienestar Natural contra el Estrés" />
-  <meta property="og:description" content="Prueba el chatbot de SerenLive y recibe tu dosis personalizada de suplemento natural para reducir estrés y ansiedad. 100% natural y sin efectos secundarios." />
+  <meta property="og:description"
+    content="Prueba el chatbot de SerenLive y recibe tu dosis personalizada de suplemento natural para reducir estrés y ansiedad. 100% natural y sin efectos secundarios." />
   <meta property="og:image" content="https://serenlive-chatbot.vercel.app/img/banner.webp" />
   <meta property="og:url" content="https://serenlive-chatbot.vercel.app" />
   <meta property="og:type" content="website" />
@@ -22,18 +26,21 @@
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SerenLive - Bienestar Natural contra el Estrés" />
-  <meta name="twitter:description" content="Descubre SerenLive: suplemento natural con ingredientes orgánicos para reducir el estrés y mejorar tu bienestar." />
+  <meta name="twitter:description"
+    content="Descubre SerenLive: suplemento natural con ingredientes orgánicos para reducir el estrés y mejorar tu bienestar." />
   <meta name="twitter:image" content="https://serenlive-chatbot.vercel.app/img/banner.webp" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 
   <!-- Fuente y estilos -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="css/chatbot.css" />
-  <link rel="stylesheet" href="css/style.css" />
-
+  <link rel="stylesheet" href="css/styles.css">
   <!-- Datos estructurados -->
   <script type="application/ld+json">
   {
@@ -56,219 +63,186 @@
   </script>
 </head>
 
-  <body>
-    <header>
-      <nav>
-        <button class="hamburger" aria-label="Abrir menú">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        <ul class="nav-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
-          <li><a href="formulario.html">Contacto</a></li>
+<body>
+  <header>
+    <nav>
+      <button class="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
+        <li><a href="formulario.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="img/flores.mp4" type="video/mp4" />
+      Tu navegador no soporta videos.
+    </video>
+
+    <div class="hero-content">
+      <h1>Serenlive</h1>
+      <p>Transforma momentos de tensión en instantes de calma.</p>
+      <a href="#quienes-somos" class="cta-button-inf" id="scrollToggleBtn">
+        <span>Descubre Más</span>
+        <i class="fas fa-arrow-down"></i>
+      </a>
+    </div>
+  </section>
+  <section id="quienes-somos">
+    <h2>SOBRE NOSOTROS</h2>
+    <div class="contenido">
+      <p>
+        Somos un equipo comprometido con mejorar el bienestar emocional de la población de Felipe
+        Carrillo Puerto. Nuestra motivación surge de la necesidad de ofrecer una alternativa real, segura y
+        accesible para quienes atraviesan momentos de tensión en su día a día.
+      </p>
+
+      <div class="app-info">
+        <h3 class="tec-acom">Beneficios e Innovación</h3>
+        <ul>
+          <li>
+            <strong>Alivio en minutos:</strong> tecnología sublingual que actúa de forma inmediata.
+          </li>
+          <li>
+            <strong>Bienestar natural:</strong> elaborado con extractos de plantas cuidadosamente seleccionadas.
+          </li>
+          <li>
+            <strong>Siempre contigo:</strong> presentación práctica y discreta para acompañarte en cualquier momento del
+            día.
+          </li>
+          <li>
+            <strong>Confianza a largo plazo:</strong> úsalo el tiempo que necesites, sin riesgo de generar dependencia.
+          </li>
+          <li>
+            <strong>Cuidado personalizado:</strong> seguimiento digital para ayudarte a mantener tu bienestar y medir tu
+            progreso.
+          </li>
         </ul>
-      </nav>
-    </header>
-
-    <section class="hero">
-      <video autoplay muted loop playsinline class="hero-video">
-        <source src="img/flores.mp4" type="video/mp4" />
-        Tu navegador no soporta videos.
-      </video>
-
-      <div class="hero-content">
-        <h1>Serenlive</h1>
-        <p>Vivir con serenidad</p>
-        <a href="#quienes-somos" class="cta-button-inf" id="scrollToggleBtn">
-          <span>Descubre Más</span>
-          <i class="fas fa-arrow-down"></i>
-        </a>
       </div>
-    </section>
-    <section id="quienes-somos">
-      <h2>¿Quiénes somos?</h2>
-      <div class="contenido">
-        <p>
-          Somos un equipo comprometido con la innovación y el bienestar. Creamos
-          soluciones naturales que ayudan a reducir el estrés y la ansiedad de
-          forma efectiva y accesible.
-        </p>
+    </div>
+  </section>
+  <!-- CHATBOT -->
+  <div class="container" id="chatContainer">
+    <div class="chat-demo">
+      <!-- Botón de cerrar -->
+      <button class="close-button" id="closeButton" onclick="minimizeChat()">×</button>
 
-        <p>
-          Inspirados por el poder de plantas ancestrales como
-          <strong>valeriana</strong>, <strong>passiflora</strong>,
-          <strong>melissa</strong> y <strong>hoja de naranja</strong>,
-          desarrollamos hemos integrado un sistema digital interactivo en forma
-          de una aplicación móvil.
-        </p>
-
-        <div class="app-info">
-          <h3 class="tec-acom">Tecnología que acompaña</h3>
-          <ul>
-            <li>
-              <strong>Recomendaciones personalizadas</strong> según tus
-              necesidades.
-            </li>
-            <li>
-              <strong>Calendario inteligente</strong> que monitorea tu
-              tratamiento.
-            </li>
-            <li>
-              <strong>Recordatorios y seguimiento</strong> para mejores
-              resultados.
-            </li>
-          </ul>
+      <div class="chat-header">
+        <div class="bot-avatar">🌿</div>
+        <div>
+          <div class="chat-title">Serenlive</div>
+          <div class="chat-subtitle">En línea • Siempre disponible</div>
         </div>
-
-        <p class="mensaje-final">
-          Combinamos la sabiduría natural con tecnología moderna para ayudarte a
-          alcanzar equilibrio emocional y bienestar duradero.
-        </p>
       </div>
-    </section>
-<!-- CHATBOT -->
-<div class="container" id="chatContainer">
-  <div class="chat-demo">
-    <!-- Botón de cerrar -->
-    <button class="close-button" id="closeButton" onclick="minimizeChat()">×</button>
 
-    <div class="chat-header">
-      <div class="bot-avatar">🌿</div>
-      <div>
-        <div class="chat-title">Serenlive</div>
-        <div class="chat-subtitle">En línea • Siempre disponible</div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot" style="animation-delay: 0.2s"></div>
       </div>
-    </div>
 
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot" style="animation-delay: 0.2s"></div>
-    </div>
+      <!-- Botón scroll to bottom -->
+      <button class="scroll-to-bottom" id="scrollToBottomBtn" title="Ir al final">↓</button>
 
-    <!-- Botón scroll to bottom -->
-    <button class="scroll-to-bottom" id="scrollToBottomBtn" title="Ir al final">↓</button>
-
-    <div class="chat-input">
-      <input type="text" class="input-field" placeholder="Escribe tu mensaje..." id="nameInput" />
-      <button class="send-button" onclick="sendName()">→</button>
+      <div class="chat-input">
+        <input type="text" class="input-field" placeholder="Escribe tu mensaje..." id="nameInput" />
+        <button class="send-button" onclick="sendName()">→</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Chat minimizado -->
-<div class="chat-minimized" id="chatMinimized" onclick="maximizeChat()">
-  <div class="bot-icon">🤖</div>
-</div>
+  <!-- Chat minimizado -->
+  <div class="chat-minimized" id="chatMinimized" onclick="maximizeChat()">
+    <div class="bot-icon">🤖</div>
+  </div>
 
-    <section id="informacion">
-      <h2>Beneficios de Nuestros Ingredientes</h2>
-      <div class="info-cards">
-        <div class="info-card">
-          <h3><i class="fas fa-leaf"></i> Valeriana officinalis</h3>
-          <p>
-            La herbolaria aprovecha las propiedades medicinales de las plantas
-            para aliviar el estrés, fortalecer el sistema inmunológico, mejorar
-            la digestión, tratar enfermedades crónicas y cuidar la piel, todo
-            bajo un enfoque holístico que busca equilibrar cuerpo, mente
-          </p>
-        </div>
-        <div class="info-card">
-          <h3><i class="fas fa-spa"></i> Passiflora incarnata</h3>
-          <p>
-            Es una planta medicinal con múltiples beneficios. Se utiliza
-            principalmente por sus propiedades ansiolíticas y relajantes,
-            ayudando a tratar el insomnio, la ansiedad y el estrés. También
-            puede aliviar problemas gastrointestinales relacionados con el
-            nerviosismo
-          </p>
-        </div>
-        <div class="info-card">
-          <h3><i class="fas fa-seedling"></i> Melissa officinalis</h3>
-          <p>
-            es una planta medicinal con múltiples beneficios. Se utiliza
-            principalmente por sus propiedades calmantes y relajantes, ayudando
-            a reducir el estrés, la ansiedad y mejorar el sueño. También es
-            eficaz para aliviar problemas digestivos, como indigestión y
-            cólicos, gracias a sus propiedades antiespasmódicas.
-          </p>
-        </div>
-        <div class="info-card">
-          <h3><i class="fas fa-lemon"></i> Citrus sinensis</h3>
-          <p>
-            ofrece beneficios como apoyo a la digestión, propiedades relajantes
-            en infusión, cuidado de la piel con su aceite esencial, y
-            contribución al bienestar general al tratar fiebre, hipertensión y
-            problemas intestinales.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCIÓN DEL PRODUCTO -->
-    <div class="main-container">
-      <div class="product-container">
-        <h2>Nuestro Producto Exclusivo</h2>
-        <div style="padding-bottom: 2rem"></div>
-        <img
-          src="img/valeriana.jpeg"
-          alt="SerenLive - Producto Natural"
-          class="product-image"
-        />
-        <h1 class="product-title">Serenlive</h1>
-        <p class="product-description">
-          Una fórmula revolucionaria que combina extractos naturales de alta
-          pureza con tecnología sublingual para una absorción rápida y efectiva.
-          Diseñado para proporcionar alivio inmediato del estrés y la ansiedad.
+  <section id="informacion">
+    <h2>Beneficios de Nuestros Ingredientes</h2>
+    <div class="info-cards">
+      <div class="info-card">
+        <h3><i class="fas fa-leaf"></i> Valeriana officinalis</h3>
+        <p>
+          La herbolaria aprovecha las propiedades medicinales de las plantas
+          para aliviar el estrés, fortalecer el sistema inmunológico, mejorar
+          la digestión, tratar enfermedades crónicas y cuidar la piel, todo
+          bajo un enfoque holístico que busca equilibrar cuerpo, mente
         </p>
-        <ul class="product-features">
-          <li>Fórmula 100% natural con ingredientes orgánicos</li>
-          <li>Absorción sublingual para efecto rápido (15-20 minutos)</li>
-          <li>Sin efectos secundarios ni dependencia</li>
-        </ul>
-
-        <div class="testimonials">
-          <h3>Lo que dicen nuestros clientes</h3>
-          <div class="testimonial-card">
-            <p>
-              "Este producto cambió mi vida. Después de años de ansiedad,
-              finalmente encontré algo que funciona sin efectos secundarios. Lo
-              recomiendo al 100%."
-            </p>
-            <footer>— Cliente satisfecho</footer>
-          </div>
-          <div class="testimonial-card">
-            <p>
-              "La combinación del producto natural con la app de seguimiento es
-              increíble. Puedo ver mi progreso y ajustar las dosis según mis
-              necesidades."
-            </p>
-            <footer>— Usuario feliz</footer>
-          </div>
-        </div>
-
-        <div class="button-container">
-          <a href="#" class="buy-button"
-            ><i class="fas fa-shopping-cart"></i> Comprar Ahora</a
-          >
-          <a href="formulario.html" class="contact-button"
-            ><i class="fas fa-envelope"></i> Contactar Asesor</a
-          >
-        </div>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-spa"></i> Passiflora incarnata</h3>
+        <p>
+          Es una planta medicinal con múltiples beneficios. Se utiliza
+          principalmente por sus propiedades ansiolíticas y relajantes,
+          ayudando a tratar el insomnio, la ansiedad y el estrés. También
+          puede aliviar problemas gastrointestinales relacionados con el
+          nerviosismo
+        </p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-seedling"></i> Melissa officinalis</h3>
+        <p>
+          es una planta medicinal con múltiples beneficios. Se utiliza
+          principalmente por sus propiedades calmantes y relajantes, ayudando
+          a reducir el estrés, la ansiedad y mejorar el sueño. También es
+          eficaz para aliviar problemas digestivos, como indigestión y
+          cólicos, gracias a sus propiedades antiespasmódicas.
+        </p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-lemon"></i> Hoja de naranja agria (Citrus × aurantium).</h3>
+        <p>
+          ofrece beneficios como apoyo a la digestión, propiedades relajantes
+          en infusión, cuidado de la piel con su aceite esencial, y
+          contribución al bienestar general al tratar fiebre, hipertensión y
+          problemas intestinales.
+        </p>
       </div>
     </div>
+  </section>
 
-    <div class="footer">
-      <p>
-        &copy; 2025 SerenLive. Todos los derechos reservados. |
-        <a href="https://www.instagram.com"
-          ><i class="fab fa-instagram"></i> Síguenos en Instagram</a
-        >
+  <!-- SECCIÓN DEL PRODUCTO -->
+  <div class="main-container">
+    <div class="product-container">
+      <h2>SERENLIVE</h2>
+      <div style="padding-bottom: 2rem"></div>
+      <img src="img/producto.webp" alt="SerenLive - Producto Natural" class="product-image lightbox-img" />
+      <h1 class="product-title">SUPLEMENTO ALIMENTICIO</h1>
+      <p class="product-description">
+        TIRAS SUBLINGUALES CON EXTRACTOS HIDROALCOHÓLICOS DE VALERIANA, PASSIFLORA,
+        MELISSA Y HOJA DE NARANJA AGRIA.
       </p>
-    </div>
+      <ul class="product-features">
+        <li>Fórmula 100% natural con ingredientes orgánicos</li>
+        <li>Absorción sublingual para efecto rápido (15-20 minutos)</li>
+        <li>Sin efectos secundarios ni dependencia</li>
+      </ul>
 
-    <script src="js/efectos.js"></script>
-    <script src="js/animaciones.js"></script>
-    <script type="module" src="src/main.js"></script>
-  </body>
+      <div class="product-button-container">
+        <a href="https://wa.me/529831143066?text=Hola%20me%20gustar%C3%ADa%20comprar%20el%20producto" class="buy-button"
+          target="_blank">
+          <i class="fas fa-shopping-cart"></i> Comprar Ahora
+        </a> <a href="formulario.html" class="contact-button"><i class="fas fa-envelope"></i> Contactar Asesor</a>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="footer">
+    <p>
+      &copy; 2025 SerenLive. Todos los derechos reservados. |
+      <a href="https://www.facebook.com/share/1KEmadBytu/?mibextid=wwXIfr"><i class="fab fa-facebook"></i> Síguenos en
+        Facebook</a>
+    </p>
+  </div>
+
+  <script src="js/efectos.js"></script>
+  <script src="js/animaciones.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+
 </html>

@@ -53,7 +53,8 @@ function generateAnalysisMessage(reco) {
 function generateDosageMessage(reco) {
   return `
     <div>
-      <strong>💊 Estamos trabajando para traerte una dosis personalizada</strong><br/>
+      <strong>💊 Si presenta síntomas como dolor de cabeza, se siente indispuesto o
+desconcentrado, coloque una tira debajo de la lengua, hasta 5 veces al día.</strong><br/>
     </div>`;
 }
 

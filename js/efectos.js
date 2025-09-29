@@ -503,3 +503,77 @@ document.addEventListener("DOMContentLoaded", function () {
 window.addEventListener("beforeunload", function () {
   window.scrollTo(0, 0);
 });
+
+// ABRIR IMAGENES
+const lightboxHTML = `
+        <div class="lightbox-overlay" id="lightboxOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease;">
+            <button class="lightbox-close" id="lightboxClose" style="position: absolute; top: 20px; right: 40px; font-size: 40px; color: white; cursor: pointer; background: none; border: none; transition: transform 0.2s ease;">&times;</button>
+            <img src="" alt="" id="lightboxImage" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s ease;">
+        </div>
+        <style>
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes zoomIn {
+                from { transform: scale(0.8); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+            .lightbox-close:hover {
+                transform: scale(1.2);
+            }
+            .lightbox-img {
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .lightbox-img:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+    `;
+
+// Insertar el lightbox en el body
+document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+
+const overlay = document.getElementById('lightboxOverlay');
+const lightboxImg = document.getElementById('lightboxImage');
+const closeBtn = document.getElementById('lightboxClose');
+
+// Función para abrir el lightbox
+function openLightbox(imgSrc, imgAlt) {
+  overlay.style.display = 'flex';
+  lightboxImg.src = imgSrc;
+  lightboxImg.alt = imgAlt || '';
+  document.body.style.overflow = 'hidden'; // Evitar scroll del body
+}
+
+// Función para cerrar el lightbox
+function closeLightbox() {
+  overlay.style.display = 'none';
+  document.body.style.overflow = ''; // Restaurar scroll
+}
+
+// Agregar evento de clic a todas las imágenes con la clase 'lightbox-img'
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('lightbox-img')) {
+    openLightbox(e.target.src, e.target.alt);
+  }
+});
+
+// Cerrar con el botón X
+closeBtn.addEventListener('click', closeLightbox);
+
+// Cerrar al hacer clic en el fondo
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    closeLightbox();
+  }
+});
+
+// Cerrar con la tecla ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay.style.display === 'flex') {
+    closeLightbox();
+  }
+});

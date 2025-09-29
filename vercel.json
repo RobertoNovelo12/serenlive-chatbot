@@ -1,0 +1,17 @@
+{
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/inicio",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/saber-mas",
+            "destination": "/informacion.html"
+        },
+        {
+            "source": "/contacto",
+            "destination": "/formulario.html"
+        }
+    ]
+}

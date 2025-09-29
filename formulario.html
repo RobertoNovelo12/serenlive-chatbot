@@ -1,87 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulario Medicina Tradicional</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
 
-    <link rel="stylesheet" href="css/formulario.css" />
-  </head>
-  <body>
-    <header>
-      <nav>
-        <button class="hamburger" aria-label="Abrir menú">
-          <span></span>
-          <span></span>
-          <span></span>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto - Serenlive</title>
+    <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <button class="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
+        <li><a href="formulario.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="form-container">
+    <h1>Contacto</h1>
+    <form id="contactForm">
+      <label for="name">Nombre</label>
+      <input type="text" id="name" name="name" placeholder="Ingresa tu nombre" required />
+
+      <label for="email">Correo</label>
+      <input type="email" id="email" name="email" placeholder="Ingresa tu correo" required />
+
+      <label for="subject">Asunto</label>
+      <input type="text" id="subject" name="subject" placeholder="Ingresa el asunto" required />
+
+      <label for="userMessage">Mensaje</label>
+      <textarea id="userMessage" name="message" placeholder="Escribe tu mensaje" rows="5" required></textarea>
+
+      <div class="button-group">
+        <button type="button" id="gmailButton" class="button-send">
+          <i class="fab fa-google"></i> Enviar con tu cuenta de Google
         </button>
-        <ul class="nav-links">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="informacion.html">¿Qué es SerenLive?</a></li>
-          <li><a href="formulario.html">Contacto</a></li>
-        </ul>
-      </nav>
-    </header>
+        <button type="button" id="outlookButton" class="button-send">
+          <i class="fab fa-microsoft"></i> Enviar con tu cuenta de Microsoft
+        </button>
+        <button type="button" id="defaultButton" class="button-send">
+          <i class="fas fa-envelope"></i> Abrir mi app de correo
+        </button>
+      </div>
+    </form>
+    <div id="message" class="hidden">¡Elige cómo quieres enviar tu mensaje!</div>
+  </div>
 
-    <div class="form-container">
-      <h1>Contacto</h1>
-      <form id="contactForm">
-        <label for="name">Nombre</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Ingresa tu nombre"
-          required
-        />
+  <div class="footer">
+    <p>
+      &copy; 2025 SerenLive. Todos los derechos reservados. |
+      <a href="https://www.facebook.com/share/1KEmadBytu/?mibextid=wwXIfr">
+        <i class="fab fa-facebook"></i> Síguenos en Facebook
+      </a>
+    </p>
+  </div>
 
-        <label for="email">Correo</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Ingresa tu correo"
-          required
-        />
+  <script>
+    // Email de destino - CAMBIA ESTE EMAIL POR EL DE TU CLIENTE
+    const destinatario = ' rominauicab1@gmail.com';
 
-        <label for="subject">Asunto</label>
-        <input
-          type="text"
-          id="subject"
-          name="subject"
-          placeholder="Ingresa el asunto"
-          required
-        />
+    function obtenerDatosFormulario() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('userMessage').value;
 
-        <label for="userMessage">Mensaje</label>
-        <textarea
-          id="userMessage"
-          name="message"
-          placeholder="Escribe tu mensaje"
-          rows="5"
-          required
-        ></textarea>
+      // Validar que todos los campos estén llenos
+      if (!name || !email || !subject || !message) {
+        alert('Por favor, completa todos los campos antes de enviar.');
+        return null;
+      }
 
-        <button type="submit" id="submitButton">Enviar</button>
-      </form>
-      <div id="message" class="hidden">¡Mensaje enviado!</div>
-    </div>
-    <!--NOTA: SI SE TIENE INSTAGRAM O ALGUNA OTRA PAGINA DE RED SOCIAL CAMBIAR-->
-    <div class="footer">
-      <p>
-        &copy; 2025 SerenLive. Todos los derechos reservados. |
-        <a href="https://www.instagram.com"
-          ><i class="fab fa-instagram"></i> Síguenos en Instagram</a
-        >
-      </p>
-    </div>
+      return { name, email, subject, message };
+    }
 
-    <script src="js/validacion.js"></script>
-    <script src="js/efectos.js"></script>
-    <script src="js/animaciones.js"></script>
-  </body>
+    function crearMensaje(datos) {
+      return `Hola,%0D%0A%0D%0A` +
+        `Mi nombre es ${datos.name}%0D%0A` +
+        `Mi correo es: ${datos.email}%0D%0A%0D%0A` +
+        `Mensaje:%0D%0A${datos.message}%0D%0A%0D%0A` +
+        `----%0D%0A` +
+        `Mensaje enviado desde SerenLive%0D%0A` +
+        `Fecha: ${new Date().toLocaleDateString('es-ES')}`;
+    }
+
+    function mostrarMensajeExito() {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = '¡Correo preparado! Revisa que se haya abierto tu cliente de correo.';
+      messageDiv.classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('contactForm').reset();
+        messageDiv.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Botón para Gmail
+    document.getElementById('gmailButton').addEventListener('click', function () {
+      const datos = obtenerDatosFormulario();
+      if (!datos) return;
+
+      const cuerpoMensaje = crearMensaje(datos);
+
+      // URL para Gmail web
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${destinatario}&su=${encodeURIComponent(datos.subject)}&body=${cuerpoMensaje}`;
+
+      window.open(gmailUrl, '_blank');
+      mostrarMensajeExito();
+    });
+
+    // Botón para Outlook
+    document.getElementById('outlookButton').addEventListener('click', function () {
+      const datos = obtenerDatosFormulario();
+      if (!datos) return;
+
+      const cuerpoMensaje = crearMensaje(datos);
+
+      // URL para Outlook web
+      const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${destinatario}&subject=${encodeURIComponent(datos.subject)}&body=${cuerpoMensaje}`;
+
+      window.open(outlookUrl, '_blank');
+      mostrarMensajeExito();
+    });
+
+    // Botón para cliente de correo predeterminado
+    document.getElementById('defaultButton').addEventListener('click', function () {
+      const datos = obtenerDatosFormulario();
+      if (!datos) return;
+
+      const cuerpoMensaje = crearMensaje(datos);
+      const mailtoLink = `mailto:${destinatario}?subject=${encodeURIComponent(datos.subject)}&body=${cuerpoMensaje}`;
+
+      window.location.href = mailtoLink;
+      mostrarMensajeExito();
+    });
+  </script>
+
+  <script src="js/efectos.js"></script>
+</body>
+
 </html>
