@@ -8,11 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const isIndexPage = window.location.pathname === '/' || 
                       window.location.pathname === '/index.html' || 
                       window.location.pathname === '/inicio';
-  
-  // Siempre inicializar el lightbox en todas las páginas
+
   initializeLightbox();
 
-  
   const header = document.querySelector("header");
   const nav = header.querySelector("nav");
   const navUl = nav.querySelector("ul");
@@ -301,6 +299,8 @@ document.addEventListener("DOMContentLoaded", function () {
         nav.style.maxWidth = maxWidth;
         navUl.style.gap = `${gapSize}px`;
         nav.style.background = `rgba(255, 255, 255, ${bgOpacity})`;
+        nav.style.backdropFilter = `blur(${blurAmount}px) saturate(${saturateAmount}%)`;
+        nav.style.webkitBackdropFilter = `blur(${blurAmount}px) saturate(${saturateAmount}%)`;
         nav.style.padding = `${verticalPadding}px ${horizontalNavPadding}px`;
         nav.style.borderRadius = `${borderRadius}px`;
         nav.style.border = `1px solid rgba(255, 255, 255, ${borderOpacity})`;
