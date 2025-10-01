@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const isIndexPage = window.location.pathname === '/' || 
                       window.location.pathname === '/index.html' || 
                       window.location.pathname === '/inicio';
-
+  
   initializeLightbox();
-
+  
   const header = document.querySelector("header");
   const nav = header.querySelector("nav");
   const navUl = nav.querySelector("ul");
@@ -207,8 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const progress = Math.min(scrollY / maxScroll, 1);
     const isCurrentlyMobile = isMobile();
 
-    // Solo actualizar el nombre de marca en mobile Y solo en index
-    if (isCurrentlyMobile && isIndexPage) {
+    // Actualizar el nombre de marca en mobile en todas las páginas
+    if (isCurrentlyMobile) {
       updateBrandName(progress);
     }
 
@@ -310,6 +310,8 @@ document.addEventListener("DOMContentLoaded", function () {
           }px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity}),
           inset 0 1px 0 rgba(255, 255, 255, ${insetOpacity})
         `;
+        
+        // Eliminadas las transformaciones translateY y scale que causaban lag
       }
     });
   }
