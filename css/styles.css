@@ -438,16 +438,19 @@ section h2::after {
 
 /* ===== QUIENES SOMOS ===== */
 #quienes-somos {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.92);
     border-radius: 28px;
     padding: 80px 60px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     max-width: 1000px;
     margin: 100px auto;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     position: relative;
+    will-change: opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
+
 
 #quienes-somos h2 {
     margin-top: 60px;
@@ -490,7 +493,6 @@ section h2::after {
     border-radius: 20px;
     padding: 40px 30px;
     margin: 3em 0;
-    backdrop-filter: blur(16px);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
@@ -528,7 +530,6 @@ section h2::after {
 
 .mensaje-final {
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     text-align: center;
@@ -821,8 +822,6 @@ section h2::after {
 .form-container {
     margin-top: 60px;
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     padding: 3rem 2.5rem;
     border-radius: 20px;
@@ -981,7 +980,6 @@ textarea {
     background: rgba(39, 174, 96, 0.1);
     border-radius: 12px;
     border: 1px solid rgba(39, 174, 96, 0.2);
-    backdrop-filter: blur(10px);
 }
 
 #message.show {
@@ -1230,8 +1228,6 @@ textarea {
 
     header.scrolled {
         background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         padding: 10px 20px;
@@ -1264,8 +1260,6 @@ textarea {
         width: 100vw;
         height: 100vh;
         background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
-        -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1342,8 +1336,6 @@ textarea {
         width: 100%;
         box-sizing: border-box;
         background: rgba(255, 255, 255, 0.35);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.4);
         transition: all 0.3s ease;
         position: relative;

@@ -123,7 +123,7 @@ export function resetForNewTest() {
     userData.name = currentName;
     userData._waitingForName = false;
     userData._testInProgress = false;
-    userData._testCompleted = false; // Agregar esta línea
+    userData._testCompleted = false;
     localStorage.setItem("chat_serenlive_data", JSON.stringify(userData));
     localStorage.removeItem("chat_serenlive_analysis");
   }

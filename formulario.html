@@ -72,7 +72,6 @@
   </div>
 
   <script>
-    // Email de destino - CAMBIA ESTE EMAIL POR EL DE TU CLIENTE
     const destinatario = ' rominauicab1@gmail.com';
 
     function obtenerDatosFormulario() {
@@ -81,7 +80,6 @@
       const subject = document.getElementById('subject').value;
       const message = document.getElementById('userMessage').value;
 
-      // Validar que todos los campos estén llenos
       if (!name || !email || !subject || !message) {
         alert('Por favor, completa todos los campos antes de enviar.');
         return null;

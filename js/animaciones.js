@@ -64,37 +64,6 @@ function initializeChatbot() {
   }, 100); // Esperar 500ms antes de mostrar
 }
 
-// Función para iniciar la animación de rebote
-function startBounceAnimation() {
-  if (hasInteracted) return;
-  
-  const chatMinimized = document.getElementById('chatMinimized');
-  
-  bounceInterval = setInterval(() => {
-    if (bounceCount < 2 && !hasInteracted) {
-      chatMinimized.classList.add('bounce');
-      bounceCount++;
-      
-      // Remover la clase después de la animación
-      setTimeout(() => {
-        chatMinimized.classList.remove('bounce');
-      }, 800);
-      
-      if (bounceCount >= 2) {
-        stopBounceAnimation();
-      }
-    }
-  }, 5000); // Cada 5 segundos
-}
-
-// Función para detener la animación de rebote
-function stopBounceAnimation() {
-  if (bounceInterval) {
-    clearInterval(bounceInterval);
-    bounceInterval = null;
-  }
-}
-
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
   initializeChatbot();

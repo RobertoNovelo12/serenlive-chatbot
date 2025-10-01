@@ -5,7 +5,6 @@ if ("scrollRestoration" in history) {
 document.documentElement.style.scrollBehavior = "smooth";
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Verificar si estamos en la página de inicio
   const isIndexPage = window.location.pathname === '/' || 
                       window.location.pathname === '/index.html' || 
                       window.location.pathname === '/inicio';
@@ -13,9 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Siempre inicializar el lightbox en todas las páginas
   initializeLightbox();
 
-  // ========================================
-  // CÓDIGO COMÚN PARA TODAS LAS PÁGINAS (incluido header animado)
-  // ========================================
   
   const header = document.querySelector("header");
   const nav = header.querySelector("nav");
@@ -86,7 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
       nav.style.borderRadius = "0px";
       nav.style.border = "none";
       nav.style.boxShadow = "none";
-      nav.style.transform = "translateY(0px) scale(1)";
       navUl.style.gap = "32px";
       header.style.padding = "20px 40px";
     } else {
@@ -98,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
       nav.style.borderRadius = "0px";
       nav.style.border = "none";
       nav.style.boxShadow = "none";
-      nav.style.transform = "translateY(0px) scale(1)";
       navUl.style.gap = "20px";
       header.style.padding = "15px 20px";
     }
@@ -300,8 +294,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const shadowOpacity = progress * 0.15;
     const shadowBlur = progress * (isCurrentlyMobile ? 30 : 50);
     const insetOpacity = progress * 0.3;
-    const translateY = -(progress * (isCurrentlyMobile ? 3 : 5));
-    const scale = 1 - progress * (isCurrentlyMobile ? 0.01 : 0.02);
 
     requestAnimationFrame(() => {
       if (transitionsEnabled || progress === 0) {
@@ -309,8 +301,6 @@ document.addEventListener("DOMContentLoaded", function () {
         nav.style.maxWidth = maxWidth;
         navUl.style.gap = `${gapSize}px`;
         nav.style.background = `rgba(255, 255, 255, ${bgOpacity})`;
-        nav.style.backdropFilter = `blur(${blurAmount}px) saturate(${saturateAmount}%)`;
-        nav.style.webkitBackdropFilter = `blur(${blurAmount}px) saturate(${saturateAmount}%)`;
         nav.style.padding = `${verticalPadding}px ${horizontalNavPadding}px`;
         nav.style.borderRadius = `${borderRadius}px`;
         nav.style.border = `1px solid rgba(255, 255, 255, ${borderOpacity})`;
@@ -320,21 +310,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity}),
           inset 0 1px 0 rgba(255, 255, 255, ${insetOpacity})
         `;
-
-        const autoHideTransform = isHeaderHidden
-          ? "translateY(-100%)"
-          : "translateY(0)";
-        const animationTransform = `translateY(${translateY}px) scale(${scale})`;
-
-        if (!isCurrentlyMobile) {
-          nav.style.transform = animationTransform;
-        } else {
-          if (isHeaderHidden) {
-            nav.style.transform = animationTransform;
-          } else {
-            nav.style.transform = animationTransform;
-          }
-        }
       }
     });
   }
@@ -367,7 +342,6 @@ document.addEventListener("DOMContentLoaded", function () {
       nav.style.borderRadius = "";
       nav.style.border = "";
       nav.style.boxShadow = "";
-      nav.style.transform = "";
       navUl.style.gap = "";
       header.style.padding = "";
     });
