@@ -4,7 +4,6 @@ let elementsToRemove = [];
 let lastCleanupTime = 0;
 let typingIndicator = null;
 
-// Función optimizada para obtener el contenedor del chat
 function getChatContainer() {
   if (!cachedChatContainer || !cachedChatContainer.parentNode) {
     cachedChatContainer = document.getElementById("chatMessages") ||
@@ -54,7 +53,6 @@ export function addMessage(type, text, avatar) {
   const container = getChatContainer();
   if (!container) return;
 
-  // Usar DocumentFragment para construcción más eficiente
   const fragment = document.createDocumentFragment();
   
   const msg = document.createElement("div");
@@ -89,7 +87,6 @@ export function showTyping() {
     return;
   }
 
-  // Remover typing anterior si existe (sin DOM query)
   hideTyping();
 
   const typingMessage = document.createElement('div');
@@ -168,17 +165,14 @@ export function renderButtonOptions(options, callback) {
   }
 }
 
-// FUNCIÓN ULTRA-OPTIMIZADA para eliminar opciones (reduce de 15 a 1 query)
 function removeAllExistingButtonOptions() {
   const now = performance.now();
   
-  // Debounce: evitar múltiples limpiezas muy seguidas
   if (now - lastCleanupTime < 50) {
     return;
   }
   lastCleanupTime = now;
 
-  // Si tenemos elementos cacheados, usarlos primero
   if (elementsToRemove.length > 0) {
     elementsToRemove.forEach(element => {
       if (element.parentNode) {
@@ -188,7 +182,6 @@ function removeAllExistingButtonOptions() {
     elementsToRemove = [];
   }
 
-  // UNA SOLA QUERY DOM para todos los selectores
   const allElements = document.querySelectorAll(`
     .option-buttons, .option-button, .chat-option, .chat-option-button,
     .options-container, .button-container, .options-wrapper, 
@@ -222,10 +215,6 @@ function removeAllExistingButtonOptions() {
     }
   }
 }
-
-// Las funciones showPostRecommendationOptionsDirectly y handlePostRecommendationOption
-// deberían moverse a otro archivo como initialOptions.js porque contienen lógica de negocio,
-// no de renderizado. Por ahora las mantengo para compatibilidad pero optimizadas:
 
 function showPostRecommendationOptionsDirectly() {  
   // Usar import para mantener configuración centralizada
